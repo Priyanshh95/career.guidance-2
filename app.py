@@ -84,6 +84,35 @@ def signup():
     
     return render_template('signup.html')
 
+@app.route('/job_recommendation', methods=['GET', 'POST'])
+def job_recommendation():
+    engineering_subjects = [
+        "Computer Science", "Mechanical Engineering", "Electrical Engineering",
+        "Civil Engineering", "Electronics and Communication", "Information Technology",
+        "Chemical Engineering", "Biomedical Engineering"
+    ]
+
+    if request.method == 'POST':
+        subjects = []
+        marks = []
+        
+        for i in range(1, 6):
+            subject = request.form.get(f'subject{i}')
+            mark = request.form.get(f'marks{i}')
+            subjects.append(subject)
+            marks.append(mark)
+
+        hackathons = request.form.get('hackathons')
+
+        # Process the data (Store in DB or use for recommendation)
+        print("Subjects:", subjects)
+        print("Marks:", marks)
+        print("Hackathons:", hackathons)
+
+        flash("Data Submitted Successfully!", "success")
+        return redirect(url_for('job_recommendation'))
+
+    return render_template('job_recommendation.html', engineering_subjects=engineering_subjects)
 
 @app.route('/dashboard')
 @login_required
