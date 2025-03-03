@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Explore Careers</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <form action="{{ url_for('careers') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search careers..."
+                   value="{{ request.args.get('search', '') }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for career in careers %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ career.title }}</h5>
+                <p class="card-text">{{ career.description }}</p>
+                <div class="mb-2">
+                    <strong>Requirements:</strong>
+                    <p class="mb-1">{{ career.requirements }}</p>
+                </div>
+                <div class="mb-2">
+                    <strong>Salary Range:</strong>
+                    <p class="mb-1">{{ career.salary_range }}</p>
+                </div>
+                <div class="mb-2">
+                    <strong>Growth Potential:</strong>
+                    <p class="mb-1">{{ career.growth_potential }}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary w-100">Learn More</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not careers %}
+<div class="text-center py-5">
+    <p class="text-muted">No careers found matching your search criteria.</p>
+</div>
+{% endif %}
+{% endblock %}

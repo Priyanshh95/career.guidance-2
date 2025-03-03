@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="display-4">Welcome to CareerGuide</h1>
+    <p class="lead">Discover your ideal career path through comprehensive assessments</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Job Recommendation</h5>
+                    <p class="card-text">Recommendation for a suitable job role based on your skills.</p>
+                    <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Enter Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Industry Trends</h5>
+                    <p class="card-text">Provide current industry trends for a job profile.</p>
+                    <!-- <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Enter Details</a> -->
+                     <h5 class="btn btn-primary">current industry trends</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Guidance</h5>
+                    <p class="card-text">Provide guidance in making a career in the job profile.</p>
+                    <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Job profiles</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">📖 Academic Details</h5>
+                    <p class="card-text">Evaluate your academic strengths and interests.</p>
+                    <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Enter Details</a>
+                </div>
+            </div>
+        </div> -->
+
+
+        
+        <!-- <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">🧠 Interest Assessment</h5>
+                    <p class="card-text">Discover your fields of interest.</p>
+                    <a href="{{ url_for('take_assessment', type='skills') }}" class="btn btn-primary">Explore Interest</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">💬 Communication Skills</h5>
+                    <p class="card-text">Evaluate your communication abilities.</p>
+                    <a href="{{ url_for('careers') }}" class="btn btn-primary">Test skills</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">💻 Technical Assessment</h5>
+                    <p class="card-text">Evaluate your technical capabilities.</p>
+                    <a href="{{ url_for('careers') }}" class="btn btn-primary">Start Testing</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">📊 Aptitude Test</h5>
+                    <p class="card-text">Test your analytical and logical reasoning.</p>
+                    <a href="{{ url_for('careers') }}" class="btn btn-primary">Take Test</a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">🎯 Career Recommendations</h5>
+                    <p class="card-text">View your personalized career paths.</p>
+                    <a href="{{ url_for('careers') }}" class="btn btn-primary">Explore Careers</a>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+{% endblock %}

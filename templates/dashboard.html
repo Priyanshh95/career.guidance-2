@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Welcome, {{ current_user.username }}!</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Your Assessments</h5>
+                {% if current_user.assessments %}
+                <ul class="list-group">
+                    {% for assessment in current_user.assessments %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ assessment.assessment_type }}
+                        <span class="badge bg-primary rounded-pill">{{ assessment.score }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="card-text">No assessments taken yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Available Assessments</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Academic Assessment</h6>
+                                <p class="card-text">Evaluate your academic strengths and interests.</p>
+                                <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Start</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Skills Assessment</h6>
+                                <p class="card-text">Test your technical and soft skills.</p>
+                                <a href="{{ url_for('take_assessment', type='skills') }}" class="btn btn-primary">Start</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
