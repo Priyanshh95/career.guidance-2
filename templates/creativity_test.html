@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Creativity Test</h2>
+<p><strong>Prompt:</strong> {{ prompt }}</p>
+
+<form id="creativityForm" method="POST">
+    <div class="mb-3">
+        <label for="story" class="form-label">Write your story:</label>
+        <textarea class="form-control" id="story" name="story" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Story</button>
+</form>
+
+<h3 class="mt-4">Feedback:</h3>
+<p id="feedback"></p>
+<script>
+    document.getElementById("creativityForm").onsubmit = async function(event) {
+        event.preventDefault();
+        
+        let story = document.getElementById("story").value;
+        
+        let response = await fetch("{{ url_for('creativity_test') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "story": story })  // Ensure correct JSON format
+        });
+    
+        let data = await response.json();
+        document.getElementById("feedback").innerText = data.feedback;
+    };
+    </script>
+
+{% endblock %}

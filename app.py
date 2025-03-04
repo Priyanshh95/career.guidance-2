@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify,redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,6 +12,7 @@ import random
 import json
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
+import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
@@ -117,15 +118,19 @@ def aptitude_test():
     if request.method == 'POST':
         # Get user answers from form
         user_answers = request.form
-        correct_answers = {q["id"]: q["answer"] for q in selected_questions}
+        correct_answers = {str(q["id"]): q["answer"] for q in selected_questions}  # Ensure keys are strings
         
-        score = sum(10 for q_id in correct_answers if user_answers.get(q_id) == correct_answers[q_id])
+        score = sum(10 for q_id in correct_answers if user_answers.get(str(q_id)) == correct_answers[q_id])
+        
+        # Store the score in the database
+        new_assessment = Assessment(user_id=current_user.id, assessment_type='Aptitude Test', score=score)
+        db.session.add(new_assessment)
+        db.session.commit()
 
-        flash(f"You scored {score} out of 100!", "success")
+        flash(f"You scored {score // 10} out of 10!", "success")
         return redirect(url_for('dashboard'))
     
     return render_template('aptitude_test.html', questions=selected_questions)
-
 
 
 # Load and Train ML Model (only once)
@@ -188,6 +193,70 @@ def job_recommendation():
 @login_required
 def dashboard():
     return render_template('dashboard.html')
+
+PROMPTS = [
+    "Write a story about a world where dreams come true.",
+    "Describe a day in the life of a time traveler.",
+    "A mysterious door appears in your house. What happens next?",
+    "You wake up with a superpower. What is it and how do you use it?"
+]
+
+def get_prompt():
+    return random.choice(PROMPTS)
+
+def check_grammar(story):
+    issues = len(re.findall(r'\b(is|are|was|were)\s+a\b', story, re.IGNORECASE))
+    return issues
+
+def assess_creativity(story):
+    unique_words = set(story.split())
+    return min(10, len(unique_words) // 10)
+
+def assess_coherence(story):
+    sentences = re.split(r'[.!?]', story)
+    return min(10, len(set(sentences)) // 5)
+
+def assess_engagement(story):
+    length = len(story.split())
+    sentences = re.split(r'[.!?]', story)
+    return min(10, (length + len(set(sentences))) // 20)
+
+def get_feedback(story):
+    score = (assess_creativity(story) + assess_coherence(story) + (10 - check_grammar(story)) + assess_engagement(story)) / 4
+    return f"Overall Score: {score:.2f}/10", score
+
+@app.route('/creativity_test', methods=['GET', 'POST'])
+@login_required
+def creativity_test():
+    if request.method == 'POST':
+        data = request.get_json()
+        story = data.get("story", "")
+        feedback, score = get_feedback(story)
+        
+        new_assessment = Assessment(user_id=current_user.id, assessment_type='Creativity Test', score=score)
+        db.session.add(new_assessment)
+        db.session.commit()
+        
+        return jsonify({"feedback": feedback, "score": score})
+    
+    return render_template('creativity_test.html', prompt=get_prompt())
+
+@app.route('/communication_test', methods=['GET', 'POST'])
+@login_required
+def communication_test():
+    if request.method == 'POST':
+        data = request.get_json()
+        response = data.get("text", "")
+        feedback, score = get_feedback(response)
+        
+        new_assessment = Assessment(user_id=current_user.id, assessment_type='Communication Test', score=score)
+        db.session.add(new_assessment)
+        db.session.commit()
+        
+        return jsonify({"feedback": feedback, "score": score})
+    
+    return render_template('communication_test.html')
+
 
 @app.route('/careers')
 def careers():
