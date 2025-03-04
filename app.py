@@ -12,6 +12,7 @@ import random
 import json
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
+from scrape_careers import scrape_career_details
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
@@ -189,14 +190,16 @@ def job_recommendation():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/careers')
+@app.route('/careers', methods=['GET', 'POST'])
 def careers():
-    search_query = request.args.get('search', '')
-    if search_query:
-        careers = Career.query.filter(Career.title.ilike(f'%{search_query}%')).all()
-    else:
-        careers = Career.query.all()
-    return render_template('careers.html', careers=careers)
+    career_info = None  # Default to None
+
+    if request.method == "POST":
+        career_name = request.form.get("career_name")  # Get input safely
+        if career_name:
+            career_info = scrape_career_details(career_name)  # Fetch details
+
+    return render_template("careers.html", career_info=career_info)
 
 @app.route('/assessment/<type>')
 @login_required
