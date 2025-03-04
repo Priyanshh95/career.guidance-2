@@ -3,6 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import pickle
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+import random
+import json
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_login import login_required, current_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
@@ -84,35 +93,96 @@ def signup():
     
     return render_template('signup.html')
 
-@app.route('/job_recommendation', methods=['GET', 'POST'])
-def job_recommendation():
-    engineering_subjects = [
-        "Computer Science", "Mechanical Engineering", "Electrical Engineering",
-        "Civil Engineering", "Electronics and Communication", "Information Technology",
-        "Chemical Engineering", "Biomedical Engineering"
-    ]
+import random
+import json
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_login import login_required, current_user
+
+# Sample set of 100 questions (Store this in a JSON file for better management)
+QUESTIONS_FILE = "aptitude_questions.json"
+
+# Load all questions from JSON file
+def load_questions():
+    with open(QUESTIONS_FILE, "r") as f:
+        return json.load(f)
+
+@app.route('/aptitude_test', methods=['GET', 'POST'])
+@login_required
+def aptitude_test():
+    questions = load_questions()
+    
+    # Select 10 random questions each time
+    selected_questions = random.sample(questions, 10)
 
     if request.method == 'POST':
-        subjects = []
-        marks = []
+        # Get user answers from form
+        user_answers = request.form
+        correct_answers = {q["id"]: q["answer"] for q in selected_questions}
         
-        for i in range(1, 6):
-            subject = request.form.get(f'subject{i}')
-            mark = request.form.get(f'marks{i}')
-            subjects.append(subject)
-            marks.append(mark)
+        score = sum(10 for q_id in correct_answers if user_answers.get(q_id) == correct_answers[q_id])
 
-        hackathons = request.form.get('hackathons')
+        flash(f"You scored {score} out of 100!", "success")
+        return redirect(url_for('dashboard'))
+    
+    return render_template('aptitude_test.html', questions=selected_questions)
 
-        # Process the data (Store in DB or use for recommendation)
-        print("Subjects:", subjects)
-        print("Marks:", marks)
-        print("Hackathons:", hackathons)
 
-        flash("Data Submitted Successfully!", "success")
+
+# Load and Train ML Model (only once)
+def train_model():
+    df = pd.read_csv("Student Placement.csv")  # Ensure this file is uploaded
+    label_encoder = LabelEncoder()
+    df['Profile'] = label_encoder.fit_transform(df['Profile'])
+
+    X = df[['DSA', 'DBMS', 'OS', 'CN', 'Mathmetics', 'Aptitute', 'Comm', 'Problem Solving', 'Creative', 'Hackathons']]
+    y = df['Profile']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
+    # Save Model & Encoder
+    with open('job_model.pkl', 'wb') as f:
+        pickle.dump(model, f)
+    with open('label_encoder.pkl', 'wb') as f:
+        pickle.dump(label_encoder, f)
+
+# Train Model
+train_model()
+
+@app.route('/job_recommendation', methods=['GET', 'POST'])
+@login_required
+def job_recommendation():
+    if request.method == 'POST':
+        # Get user inputs
+        user_data = [
+            int(request.form.get('DSA')),
+            int(request.form.get('DBMS')),
+            int(request.form.get('OS')),
+            int(request.form.get('CN')),
+            int(request.form.get('Mathmetics')),
+            int(request.form.get('Aptitute')),
+            int(request.form.get('Comm')),
+            int(request.form.get('Problem_Solving')),
+            int(request.form.get('Creative')),
+            int(request.form.get('Hackathons'))
+        ]
+
+        # Load model and encoder
+        with open('job_model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        with open('label_encoder.pkl', 'rb') as f:
+            label_encoder = pickle.load(f)
+
+        # Predict job profile
+        predicted_profile = model.predict([user_data])
+        job_role = label_encoder.inverse_transform(predicted_profile)[0]
+
+        flash(f"Recommended Job Role: {job_role}", "success")
         return redirect(url_for('job_recommendation'))
 
-    return render_template('job_recommendation.html', engineering_subjects=engineering_subjects)
+    return render_template('job_recommendation.html')
+
 
 @app.route('/dashboard')
 @login_required
