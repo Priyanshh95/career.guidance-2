@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Communication Test</h2>
+<form id="communicationForm" method="POST">
+    <div class="mb-3">
+        <label for="text" class="form-label">Write a structured response on any topic:</label>
+        <textarea class="form-control" id="text" name="text" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<h3 class="mt-4">Feedback:</h3>
+<p id="feedback"></p>
+
+<script>
+    document.getElementById("communicationForm").onsubmit = async function(event) {
+        event.preventDefault();
+        
+        let text = document.getElementById("text").value;
+        
+        let response = await fetch("{{ url_for('communication_test') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "text": text })  // Ensure correct JSON format
+        });
+    
+        let data = await response.json();
+        document.getElementById("feedback").innerText = data.feedback;
+    };
+    </script>
+    
+{% endblock %}

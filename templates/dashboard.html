@@ -4,6 +4,7 @@
 <h2 class="mb-4">Welcome, {{ current_user.username }}!</h2>
 
 <div class="row">
+    <!-- Left Side: Scores -->
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body">
@@ -24,27 +25,36 @@
         </div>
     </div>
 
+    <!-- Right Side: Available Tests -->
     <div class="col-md-8">
         <div class="card mb-4">
             <div class="card-body">
                 <h5 class="card-title">Available Assessments</h5>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Academic Assessment</h6>
-                                <p class="card-text">Evaluate your academic strengths and interests.</p>
-                                <a href="{{ url_for('take_assessment', type='academic') }}" class="btn btn-primary">Start</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div class="card">
                             <div class="card-body">
                                 <h6 class="card-title">Aptitude Test</h6>
                                 <p class="card-text">Test your Aptitude skills.</p>
                                 <a href="{{ url_for('aptitude_test') }}" class="btn btn-primary">Take Aptitude Test</a>
-
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Creativity Test</h6>
+                                <p class="card-text">Test your Creativity.</p>
+                                <a href="{{ url_for('creativity_test') }}" class="btn btn-success">Take Creativity Test</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">Communication Test</h6>
+                                <p class="card-text">Evaluate your Communication skills.</p>
+                                <a href="{{ url_for('communication_test') }}" class="btn btn-warning">Take Communication Test</a>
                             </div>
                         </div>
                     </div>
