@@ -192,7 +192,6 @@ def job_recommendation():
 
     return render_template('job_recommendation.html')
 
-@app.route('/careers', methods=['GET', 'POST'])
 
 @app.route('/dashboard')
 @login_required
@@ -266,8 +265,7 @@ def communication_test():
     return render_template('communication_test.html')
 
 
-@app.route('/careers')
-
+@app.route('/careers', methods=['GET', 'POST'])
 def careers():
     career_info = None  # Default to None
 
