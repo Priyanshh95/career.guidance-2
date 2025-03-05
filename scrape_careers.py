@@ -16,7 +16,6 @@ def scrape_wikipedia(career_name):
             return None, None  
 
         soup = BeautifulSoup(response.text, "html.parser")
-
         # Extract first meaningful paragraph
         paragraphs = soup.find_all("p")
         career_info = ""
