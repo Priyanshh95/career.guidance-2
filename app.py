@@ -12,11 +12,11 @@ import random
 import json
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
-<<<<<<< HEAD
+
 from scrape_careers import scrape_career_details
-=======
+
 import re
->>>>>>> upstream/main
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
@@ -192,15 +192,16 @@ def job_recommendation():
 
     return render_template('job_recommendation.html')
 
+@app.route('/careers', methods=['GET', 'POST'])
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
 
-<<<<<<< HEAD
-@app.route('/careers', methods=['GET', 'POST'])
-=======
+
+
+
 PROMPTS = [
     "Write a story about a world where dreams come true.",
     "Describe a day in the life of a time traveler.",
@@ -266,7 +267,7 @@ def communication_test():
 
 
 @app.route('/careers')
->>>>>>> upstream/main
+
 def careers():
     career_info = None  # Default to None
 
