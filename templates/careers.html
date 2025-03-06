@@ -15,7 +15,7 @@
 
 {% if career_info %}
     <h5>Career Details</h5>
-    <p>{{ career_info }}</p>
+    <p>{{ career_info|replace('\n', '<br>')|safe }}</p>
 {% endif %}
 
 <div class="row">
@@ -24,18 +24,18 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">{{ career.title }}</h5>
-                <p class="card-text">{{ career.description }}</p>
+                <p class="card-text">{{ career.description|replace('\n', '<br>')|safe }}</p>
                 <div class="mb-2">
                     <strong>Requirements:</strong>
-                    <p class="mb-1">{{ career.requirements }}</p>
+                    <p class="mb-1">{{ career.requirements|replace('\n', '<br>')|safe }}</p>
                 </div>
                 <div class="mb-2">
                     <strong>Salary Range:</strong>
-                    <p class="mb-1">{{ career.salary_range }}</p>
+                    <p class="mb-1">{{ career.salary_range|replace('\n', '<br>')|safe }}</p>
                 </div>
                 <div class="mb-2">
                     <strong>Growth Potential:</strong>
-                    <p class="mb-1">{{ career.growth_potential }}</p>
+                    <p class="mb-1">{{ career.growth_potential|replace('\n', '<br>')|safe }}</p>
                 </div>
             </div>
             <div class="card-footer">
