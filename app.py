@@ -114,27 +114,40 @@ def load_questions():
 @app.route('/aptitude_test', methods=['GET', 'POST'])
 @login_required
 def aptitude_test():
-    questions = load_questions()
-    
-    # Select 10 random questions each time
-    selected_questions = random.sample(questions, 10)
-
     if request.method == 'POST':
-        # Get user answers from form
+        # Retrieve stored questions from session
+        selected_questions = session.get('selected_questions', [])
+        if not selected_questions:
+            flash("Session expired! Please retake the test.", "error")
+            return redirect(url_for('aptitude_test'))
+
+        # Extract user answers from form submission
         user_answers = request.form
-        correct_answers = {str(q["id"]): q["answer"] for q in selected_questions}  # Ensure keys are strings
-        
-        score = sum(10 for q_id in correct_answers if user_answers.get(str(q_id)) == correct_answers[q_id])
-        
-        # Store the score in the database
+
+        # Extract correct answers from stored questions
+        correct_answers = {q["id"]: q["answer"] for q in selected_questions}
+
+        # Compute score
+        score = sum(
+            10 for q_id, correct_ans in correct_answers.items()
+            if user_answers.get(q_id, "").strip() == correct_ans.strip()
+        )
+
+        # Save the score in database
         new_assessment = Assessment(user_id=current_user.id, assessment_type='Aptitude Test', score=score)
         db.session.add(new_assessment)
         db.session.commit()
 
         flash(f"You scored {score // 10} out of 10!", "success")
         return redirect(url_for('dashboard'))
-    
+
+    # GET request: Select 10 random questions and store in session
+    questions = load_questions()
+    selected_questions = random.sample(questions, 10)
+    session['selected_questions'] = selected_questions  # Store in session for later grading
+
     return render_template('aptitude_test.html', questions=selected_questions)
+
 
 
 # Load and Train ML Model (only once)
