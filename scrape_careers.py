@@ -16,7 +16,6 @@ def scrape_wikipedia(career_name):
             return None, None  
 
         soup = BeautifulSoup(response.text, "html.parser")
-
         # Extract first meaningful paragraph
         paragraphs = soup.find_all("p")
         career_info = ""
@@ -117,7 +116,7 @@ def scrape_career_details(career_name):
     ai_generated_data = generate_future_scope_and_certifications(career_name)
 
     final_data = {
-        "Career": career_name.capitalize(),
+        "Career": career_name.capitalize(), 
         "Career Overview": career_info if career_info else "No data found.",
         "Job Roles": wikipedia_data.get("Job Roles", "Not Found"),
         "Average Salary": wikipedia_data.get("Salary", "Not Found"),
@@ -126,7 +125,10 @@ def scrape_career_details(career_name):
         "Certifications": ai_generated_data["Certifications"]
     }
 
-    return json.dumps(final_data, indent=4)
+    formatted_data = "<br>".join([
+    f"<strong>{key}:</strong> {', '.join(value) if isinstance(value, list) else value}" 
+    for key, value in final_data.items()])
+    return formatted_data
 
 if __name__ == "__main__":
     career = input("Enter a career: ")
