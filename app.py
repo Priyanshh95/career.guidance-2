@@ -76,26 +76,34 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form.get('username')  # <-- Possible issue: username may be None
-        email = request.form.get('email')
+        username = request.form.get('username').strip()
+        email = request.form.get('email').strip().lower()
         password = request.form.get('password')
-        
-        if User.query.filter_by(email=email).first():
-            flash('Email already exists', 'error')
+        confirm_password = request.form.get('confirm_password')
+
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
             return redirect(url_for('signup'))
-        
+
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists.', 'danger')
+            return redirect(url_for('signup'))
+
+        if User.query.filter_by(email=email).first():
+            flash('Email already registered.', 'danger')
+            return redirect(url_for('signup'))
+
         new_user = User(
             username=username,
             email=email,
             password_hash=generate_password_hash(password)
         )
-        
         db.session.add(new_user)
         db.session.commit()
-        
-        flash('Account created successfully!', 'success')
+
+        flash('Account created successfully! Please log in.', 'success')
         return redirect(url_for('login'))
-    
+
     return render_template('signup.html')
 
 import random
@@ -197,11 +205,17 @@ def job_recommendation():
             label_encoder = pickle.load(f)
 
         # Predict job profile
-        predicted_profile = model.predict([user_data])
-        job_role = label_encoder.inverse_transform(predicted_profile)[0]
+        # Get top 3 job predictions
+        if hasattr(model, 'predict_proba'):
+            probabilities = model.predict_proba([user_data])[0]
+            top_3_indices = probabilities.argsort()[-3:][::-1]
+            top_3_jobs = label_encoder.inverse_transform(top_3_indices).tolist()
+        else:
+        # Fallback if model doesn't support predict_proba
+            predicted_profile = model.predict([user_data])
+            top_3_jobs = label_encoder.inverse_transform(top_3_indices).tolist()
 
-        flash(f"Recommended Job Role: {job_role}", "success")
-        return redirect(url_for('job_recommendation'))
+        return render_template('job_recommendation.html', job_predictions=top_3_jobs)
 
     return render_template('job_recommendation.html')
 
