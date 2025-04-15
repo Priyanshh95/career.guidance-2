@@ -32,6 +32,20 @@
                 </div>
             {% endif %}
         {% endwith %}
+        {% if job_predictions %}
+            <div class="mt-4">
+                <h4>Top 3 Job Recommendations:</h4>
+                <ol>
+                    {% for job in job_predictions %}
+                    <li>
+                        <a href="https://www.google.com/search?q={{ job | urlencode }}" target="_blank">
+                            {{ job }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ol>                
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>
