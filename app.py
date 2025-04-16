@@ -12,9 +12,8 @@ import random
 import json
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
-
 from scrape_careers import scrape_career_details
-
+from industry_trends import get_industry_trends
 import re
 
 
@@ -693,6 +692,21 @@ def submit_assessment():
     flash('Assessment submitted successfully!', 'success')
     return redirect(url_for('dashboard'))
 
+@app.route('/industry_trends', methods=['GET', 'POST'])
+def industry_trends():
+    job_info = None
+    if request.method == 'POST':
+        job_role = request.form.get('job_role')
+
+        trend_data = get_industry_trends(job_role)
+        job_info = {
+            'role': job_role,
+            'description': trend_data.get("description", "No description available."),
+            'trend_score': trend_data.get("trend_score"),
+            'companies': trend_data.get("companies", []),
+            'salary': trend_data.get("salary", "Not available")
+        }
+    return render_template('industry_trends.html', job_info=job_info)
 @app.route('/logout')
 @login_required
 def logout():
