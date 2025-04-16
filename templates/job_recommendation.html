@@ -33,17 +33,17 @@
             {% endif %}
         {% endwith %}
         {% if job_predictions %}
-            <div class="mt-4">
-                <h4>Top 3 Job Recommendations:</h4>
-                <ol>
-                    {% for job in job_predictions %}
-                    <li>
-                        <a href="{{ url_for('job_detail', job_name=job.lower()) }}">{{ job }}</a>
-                    </li>
-                    {% endfor %}
-                </ol>                
-            </div>
-        {% endif %}
+    <div class="mt-4">
+        <h4>Top 3 Job Recommendations:</h4>
+        <ol>
+            {% for job in job_predictions %}
+            <li>
+                <a href="{{ url_for('job_detail', job_name=job.lower()) }}">{{ job }}</a>
+            </li>
+            {% endfor %}
+        </ol>                
+    </div>
+{% endif %}
     </div>
 </body>
 </html>
