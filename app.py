@@ -179,6 +179,373 @@ def train_model():
 # Train Model
 train_model()
 
+@app.route('/job/<job_name>')
+def job_detail(job_name):
+    job_info = get_job_info(job_name)  # You’ll define this function
+    return render_template("job_detail.html", job_name=job_name, job_info=job_info)
+
+def get_job_info(job_name):
+    jobs = {
+        "data_scientist": {
+            "title": "Data Scientist",
+            "description": "Uses statistics, machine learning, and data analysis to extract insights and guide data-driven decisions.",
+            "skills": ["Python", "R", "SQL", "Machine Learning", "Data Visualization", "Statistical Analysis"],
+            "responsibilities": [
+                "Collect, clean, and analyze large datasets",
+                "Build predictive models",
+                "Communicate insights via reports and visualizations"
+            ],
+            "education": "Bachelor’s or Master’s in CS, Stats, or related field. PhD preferred for research roles.",
+            "salary": "$95,000 - $150,000 per year",
+            "outlook": "Excellent, with 36% growth expected over the next decade."
+        },
+        "software_engineer": {
+            "title": "Software Engineer",
+            "description": "Designs, builds, tests, and maintains software systems.",
+            "skills": ["Java", "Python", "C++", "Git", "Data Structures", "OOP"],
+            "responsibilities": [
+                "Develop and test software applications",
+                "Collaborate with cross-functional teams",
+                "Maintain and improve codebases"
+            ],
+            "education": "Bachelor’s in CS or related field",
+            "salary": "$85,000 - $140,000 per year",
+            "outlook": "22% growth expected; high demand across industries."
+        },
+        "web_developer": {
+            "title": "Web Developer",
+            "description": "Builds and maintains websites and web applications.",
+            "skills": ["HTML", "CSS", "JavaScript", "React", "Node.js", "UI/UX"],
+            "responsibilities": [
+                "Design responsive websites",
+                "Ensure performance and scalability",
+                "Work with designers and backend teams"
+            ],
+            "education": "Degree or diploma in Web Development or CS",
+            "salary": "$65,000 - $110,000 per year",
+            "outlook": "13% growth as businesses expand their online presence."
+        },
+        "business_analyst": {
+            "title": "Business Analyst",
+            "description": "Analyzes business processes to identify areas for improvement.",
+            "skills": ["Excel", "SQL", "Requirement Gathering", "Communication", "Problem-solving"],
+            "responsibilities": [
+                "Identify business needs and solutions",
+                "Bridge between stakeholders and tech team",
+                "Document requirements and generate reports"
+            ],
+            "education": "Bachelor’s in Business, IT, or related field",
+            "salary": "$70,000 - $115,000 per year",
+            "outlook": "Growing demand as companies pursue optimization."
+        },
+        "system_engineer": {
+            "title": "System Engineer",
+            "description": "Maintains and administers an organization’s IT systems.",
+            "skills": ["Linux", "Networking", "Scripting", "Cloud Platforms"],
+            "responsibilities": [
+                "Install and configure software and hardware",
+                "Monitor system performance",
+                "Troubleshoot technical issues"
+            ],
+            "education": "Bachelor’s in IT or related field",
+            "salary": "$75,000 - $120,000 per year",
+            "outlook": "Steady demand for system operations roles."
+        },
+        "ai_ml_engineer": {
+            "title": "AI/ML Engineer",
+            "description": "Develops machine learning models and AI systems.",
+            "skills": ["Python", "TensorFlow", "Pandas", "NLP", "Deep Learning"],
+            "responsibilities": [
+                "Build and train ML models",
+                "Deploy models into production",
+                "Work with data teams to gather and process data"
+            ],
+            "education": "Bachelor’s/Master’s in AI, ML, CS, or similar",
+            "salary": "$100,000 - $160,000 per year",
+            "outlook": "High growth with applications across industries."
+        },
+        "cloud_engineer": {
+            "title": "Cloud Engineer",
+            "description": "Designs and maintains cloud infrastructure and services.",
+            "skills": ["AWS", "Azure", "Docker", "Kubernetes", "Terraform"],
+            "responsibilities": [
+                "Build and manage cloud resources",
+                "Implement CI/CD pipelines",
+                "Ensure high availability and security"
+            ],
+            "education": "Bachelor’s in IT or Cloud Certifications",
+            "salary": "$90,000 - $145,000 per year",
+            "outlook": "Strong outlook as cloud adoption increases."
+        },
+        "devops_engineer": {
+            "title": "DevOps Engineer",
+            "description": "Combines development and operations to streamline deployment processes.",
+            "skills": ["Jenkins", "Docker", "CI/CD", "Monitoring", "Linux"],
+            "responsibilities": [
+                "Automate software pipelines",
+                "Manage infrastructure as code",
+                "Collaborate with developers and IT"
+            ],
+            "education": "Bachelor’s in CS or related field",
+            "salary": "$95,000 - $140,000 per year",
+            "outlook": "Rapidly growing demand in agile environments."
+        },
+        "network_engineer": {
+            "title": "Network Engineer",
+            "description": "Designs and manages computer networks within an organization.",
+            "skills": ["Cisco", "Routing/Switching", "Firewalls", "Security"],
+            "responsibilities": [
+                "Set up and maintain networks",
+                "Troubleshoot connectivity issues",
+                "Ensure network security"
+            ],
+            "education": "Bachelor’s in Networking or IT",
+            "salary": "$75,000 - $120,000 per year",
+            "outlook": "Steady growth as infrastructure scales."
+        },
+        "database_administrator": {
+            "title": "Database Administrator",
+            "description": "Maintains and secures databases, ensuring efficient access and storage.",
+            "skills": ["SQL", "Oracle", "MySQL", "Backup/Recovery", "Performance Tuning"],
+            "responsibilities": [
+                "Install and upgrade DB systems",
+                "Monitor performance",
+                "Implement security policies"
+            ],
+            "education": "Bachelor’s in CS or Database Certifications",
+            "salary": "$80,000 - $130,000 per year",
+            "outlook": "Essential role for data-driven companies."
+        },
+        "cybersecurity_analyst": {
+            "title": "Cybersecurity Analyst",
+            "description": "Protects systems from cyber threats and vulnerabilities.",
+            "skills": ["Firewalls", "Threat Detection", "Risk Management", "SIEM"],
+            "responsibilities": [
+                "Monitor and secure networks",
+                "Analyze threat intelligence",
+                "Respond to security incidents"
+            ],
+            "education": "Bachelor’s in Cybersecurity or CS",
+            "salary": "$85,000 - $135,000 per year",
+            "outlook": "35% growth expected due to rising cyber threats."
+        },
+    }
+    return jobs.get(job_name.lower().replace(" ", "_"), {
+        "title": "Unknown Role",
+        "description": "No details found for this job role.",
+        "skills": [],
+        "responsibilities": [],
+        "education": "N/A",
+        "salary": "N/A",
+        "outlook": "N/A"
+    })
+
+@app.route('/roadmap/<job_role>', methods=['GET'])
+def show_roadmap(job_role):
+    roadmaps = {
+        'data scientist': {
+            'step_1': {'task': 'Learn Python & Statistics', 'weeks': 6, 'resources': ['Coursera: Python for Data Science', 'Khan Academy: Statistics', 'DataCamp']},
+            'step_2': {'task': 'Master Data Analysis & Visualization', 'weeks': 8, 'resources': ['Pandas Documentation', 'Matplotlib Tutorials', 'Tableau Public']},
+            'step_3': {'task': 'Study Machine Learning Algorithms', 'weeks': 10, 'resources': ['Scikit-learn Documentation', 'Andrew Ng\'s ML Course', 'Kaggle Competitions']},
+            'step_4': {'task': 'Learn Deep Learning Fundamentals', 'weeks': 8, 'resources': ['TensorFlow Tutorials', 'fast.ai Course', 'Deep Learning Specialization']},
+            'step_5': {'task': 'Work on Real-World Data Projects', 'weeks': 12, 'resources': ['GitHub Repositories', 'Kaggle Datasets', 'Company Data Challenges']}
+        },
+        
+        'software engineer': {
+            'step_1': {'task': 'Master Programming Fundamentals', 'weeks': 6, 'resources': ['freeCodeCamp', 'Codecademy', 'LeetCode']},
+            'step_2': {'task': 'Learn Data Structures & Algorithms', 'weeks': 8, 'resources': ['AlgoExpert', 'Introduction to Algorithms (Book)', 'HackerRank']},
+            'step_3': {'task': 'Study System Design & Architecture', 'weeks': 6, 'resources': ['System Design Primer (GitHub)', 'Grokking System Design', 'AWS Architecture Blog']},
+            'step_4': {'task': 'Learn Version Control & CI/CD', 'weeks': 4, 'resources': ['Git Documentation', 'GitHub Learning Lab', 'Jenkins Tutorials']},
+            'step_5': {'task': 'Build Portfolio Projects', 'weeks': 10, 'resources': ['GitHub', 'Portfolio Websites', 'Open Source Contributions']}
+        },
+        
+        'ux designer': {
+            'step_1': {'task': 'Learn UI/UX Fundamentals', 'weeks': 4, 'resources': ['Interaction Design Foundation', 'Nielsen Norman Group Articles', 'UX Design Institute']},
+            'step_2': {'task': 'Master Design Tools (Figma, Adobe XD)', 'weeks': 6, 'resources': ['Figma Tutorials', 'Adobe XD Learning Resources', 'Design Tool YouTube Channels']},
+            'step_3': {'task': 'Practice Wireframing & Prototyping', 'weeks': 5, 'resources': ['SketchApp Resources', 'Balsamiq Tutorials', 'Dribbble Inspiration']},
+            'step_4': {'task': 'Learn User Research Methods', 'weeks': 4, 'resources': ['UX Research Field Guide', 'User Testing Tools', 'Survey Design Best Practices']},
+            'step_5': {'task': 'Build a Design Portfolio', 'weeks': 6, 'resources': ['Behance', 'Dribbble', 'Portfolio Website Templates']}
+        },
+        
+        'web developer': {
+            'step_1': {'task': 'Learn HTML, CSS, and JavaScript', 'weeks': 5, 'resources': ['MDN Web Docs', 'W3Schools', 'freeCodeCamp']},
+            'step_2': {'task': 'Master Frontend Frameworks (React, Vue)', 'weeks': 6, 'resources': ['React Documentation', 'Vue.js Guide', 'Frontend Masters']},
+            'step_3': {'task': 'Learn Backend Technologies (Node.js, Django)', 'weeks': 7, 'resources': ['Node.js Documentation', 'Django Project', 'Backend API Design']},
+            'step_4': {'task': 'Study Database Design & Management', 'weeks': 5, 'resources': ['MongoDB University', 'PostgreSQL Tutorials', 'SQL Exercises']},
+            'step_5': {'task': 'Deploy & Manage Web Applications', 'weeks': 4, 'resources': ['Netlify', 'Vercel Documentation', 'AWS Deployment Guides']}
+        },
+        
+        'digital marketer': {
+            'step_1': {'task': 'Learn SEO and SEM Fundamentals', 'weeks': 4, 'resources': ['Google Digital Garage', 'Moz SEO Course', 'SEMrush Academy']},
+            'step_2': {'task': 'Master Social Media Marketing', 'weeks': 5, 'resources': ['Hootsuite Academy', 'Facebook Blueprint', 'Social Media Examiner']},
+            'step_3': {'task': 'Study Content Marketing', 'weeks': 4, 'resources': ['Content Marketing Institute', 'HubSpot Academy', 'Copywriting Books']},
+            'step_4': {'task': 'Learn Analytics Tools & Data Analysis', 'weeks': 6, 'resources': ['Google Analytics Academy', 'Tableau for Marketing', 'Data Studio']},
+            'step_5': {'task': 'Execute Marketing Campaigns', 'weeks': 8, 'resources': ['A/B Testing Tools', 'Campaign Strategy Templates', 'Marketing Measurement']}
+        },
+        
+        'product manager': {
+            'step_1': {'task': 'Learn Product Management Fundamentals', 'weeks': 4, 'resources': ['Product School', 'Mind the Product', 'PM Reading Lists']},
+            'step_2': {'task': 'Master User Research & Customer Development', 'weeks': 5, 'resources': ['User Interview Techniques', 'Survey Tools', 'Jobs-to-be-Done Framework']},
+            'step_3': {'task': 'Study Product Strategy & Roadmapping', 'weeks': 6, 'resources': ['Roadmap Templates', 'Product Strategy Books', 'Prioritization Frameworks']},
+            'step_4': {'task': 'Learn Agile & Product Development Processes', 'weeks': 5, 'resources': ['Scrum Guide', 'Agile Alliance Resources', 'Jira Tutorials']},
+            'step_5': {'task': 'Build Product Management Portfolio', 'weeks': 8, 'resources': ['Case Studies', 'Product Analytics', 'Product Launch Templates']}
+        },
+        
+        'data analyst': {
+            'step_1': {'task': 'Learn SQL & Database Fundamentals', 'weeks': 5, 'resources': ['Mode Analytics SQL Tutorial', 'W3Schools SQL', 'PostgreSQL Exercises']},
+            'step_2': {'task': 'Master Data Analysis Tools (Excel, Python)', 'weeks': 6, 'resources': ['Excel Data Analysis Course', 'Pandas Documentation', 'NumPy Tutorials']},
+            'step_3': {'task': 'Study Data Visualization', 'weeks': 5, 'resources': ['Tableau Public', 'Power BI Learning', 'Data Visualization Best Practices']},
+            'step_4': {'task': 'Learn Statistical Analysis', 'weeks': 6, 'resources': ['Khan Academy Statistics', 'StatQuest YouTube Channel', 'R for Statistical Analysis']},
+            'step_5': {'task': 'Work on Data Analysis Projects', 'weeks': 8, 'resources': ['Kaggle Datasets', 'Public Data Resources', 'Data Analysis Portfolio']}
+        },
+        
+        'cybersecurity analyst': {
+            'step_1': {'task': 'Learn Network & Security Fundamentals', 'weeks': 6, 'resources': ['CompTIA Security+ Materials', 'Cybrary Courses', 'Networking Basics']},
+            'step_2': {'task': 'Master Operating System Security', 'weeks': 5, 'resources': ['Linux Security Administration', 'Windows Security', 'OS Hardening Guidelines']},
+            'step_3': {'task': 'Study Threat Detection & Analysis', 'weeks': 7, 'resources': ['SANS Reading Room', 'Malware Analysis Tutorials', 'Threat Intelligence Resources']},
+            'step_4': {'task': 'Learn Security Tools & SIEM', 'weeks': 6, 'resources': ['Splunk Fundamentals', 'Wireshark Tutorials', 'Security Onion']},
+            'step_5': {'task': 'Practice with CTFs & Security Labs', 'weeks': 8, 'resources': ['TryHackMe', 'HackTheBox', 'VulnHub']}
+        },
+        
+        'business analyst': {
+            'step_1': {'task': 'Learn Business Analysis Fundamentals', 'weeks': 4, 'resources': ['BABOK Guide', 'BA Blogs', 'Business Analysis Courses']},
+            'step_2': {'task': 'Master Requirements Gathering & Documentation', 'weeks': 5, 'resources': ['User Story Templates', 'Requirements Workshops', 'Documentation Tools']},
+            'step_3': {'task': 'Study Process Modeling & Analysis', 'weeks': 6, 'resources': ['BPMN Tutorials', 'Process Mapping Tools', 'System Analysis Methods']},
+            'step_4': {'task': 'Learn Data Analysis for Business', 'weeks': 5, 'resources': ['Excel for BA', 'SQL for Business', 'Tableau for Analysis']},
+            'step_5': {'task': 'Practice with Case Studies & Projects', 'weeks': 8, 'resources': ['BA Case Studies', 'Business Problem Solving', 'Industry Analysis']}
+        },
+        
+        'project manager': {
+            'step_1': {'task': 'Learn Project Management Fundamentals', 'weeks': 5, 'resources': ['PMBOK Guide', 'PMI Resources', 'Project Management Courses']},
+            'step_2': {'task': 'Master Planning & Scheduling Techniques', 'weeks': 4, 'resources': ['Gantt Chart Tools', 'Critical Path Method', 'Project Planning Templates']},
+            'step_3': {'task': 'Study Risk Management & Mitigation', 'weeks': 4, 'resources': ['Risk Register Templates', 'Risk Analysis Methods', 'Contingency Planning']},
+            'step_4': {'task': 'Learn Team Leadership & Communication', 'weeks': 5, 'resources': ['Leadership Books', 'Conflict Resolution', 'Communication Frameworks']},
+            'step_5': {'task': 'Practice with Project Management Tools', 'weeks': 6, 'resources': ['MS Project', 'Jira', 'Asana', 'Project Documentation Templates']}
+        },
+        
+        'marketing manager': {
+            'step_1': {'task': 'Learn Marketing Strategy & Planning', 'weeks': 5, 'resources': ['Marketing Plan Templates', 'Strategic Marketing Books', 'Industry Reports']},
+            'step_2': {'task': 'Master Digital Marketing Channels', 'weeks': 6, 'resources': ['Google Digital Marketing Course', 'HubSpot Academy', 'Social Media Strategy']},
+            'step_3': {'task': 'Study Brand Management', 'weeks': 4, 'resources': ['Brand Strategy Resources', 'Brand Style Guides', 'Positioning Templates']},
+            'step_4': {'task': 'Learn Marketing Analytics', 'weeks': 5, 'resources': ['Google Analytics', 'Marketing Attribution Models', 'ROI Calculation']},
+            'step_5': {'task': 'Practice Campaign Management', 'weeks': 8, 'resources': ['Campaign Planning Tools', 'Marketing Calendar Templates', 'Marketing Automation']}
+        },
+        
+        'machine learning engineer': {
+            'step_1': {'task': 'Master Programming & Mathematics', 'weeks': 8, 'resources': ['Advanced Python', 'Linear Algebra', 'Calculus', 'Probability']},
+            'step_2': {'task': 'Learn Machine Learning Algorithms', 'weeks': 10, 'resources': ['Machine Learning Course', 'scikit-learn', 'ML Textbooks']},
+            'step_3': {'task': 'Study Deep Learning Frameworks', 'weeks': 8, 'resources': ['TensorFlow', 'PyTorch', 'Deep Learning Course']},
+            'step_4': {'task': 'Learn MLOps & Deployment', 'weeks': 6, 'resources': ['Docker', 'Kubernetes', 'ML Pipelines', 'Model Serving']},
+            'step_5': {'task': 'Build End-to-End ML Projects', 'weeks': 10, 'resources': ['Kaggle Competitions', 'GitHub ML Projects', 'Research Papers Implementation']}
+        },
+        
+        'frontend developer': {
+            'step_1': {'task': 'Learn HTML, CSS, and JavaScript Deeply', 'weeks': 6, 'resources': ['Frontend Masters', 'CSS Tricks', 'JavaScript.info']},
+            'step_2': {'task': 'Master Modern JavaScript Frameworks', 'weeks': 8, 'resources': ['React Documentation', 'Vue.js Guide', 'Angular Tutorials']},
+            'step_3': {'task': 'Study Responsive Design & Accessibility', 'weeks': 4, 'resources': ['MDN Accessibility Guide', 'Responsive Web Design', 'WCAG Standards']},
+            'step_4': {'task': 'Learn State Management & API Integration', 'weeks': 5, 'resources': ['Redux Documentation', 'GraphQL Tutorials', 'RESTful API Design']},
+            'step_5': {'task': 'Build Complex Frontend Applications', 'weeks': 8, 'resources': ['Frontend Projects', 'UI Component Libraries', 'Animation Libraries']}
+        },
+        
+        'backend developer': {
+            'step_1': {'task': 'Learn Server-Side Programming', 'weeks': 6, 'resources': ['Node.js', 'Python Django/Flask', 'Java Spring']},
+            'step_2': {'task': 'Master Database Design & Management', 'weeks': 7, 'resources': ['SQL Tutorials', 'MongoDB University', 'Database Design Principles']},
+            'step_3': {'task': 'Study API Development', 'weeks': 5, 'resources': ['RESTful API Design', 'GraphQL', 'API Authentication & Security']},
+            'step_4': {'task': 'Learn Server Infrastructure & Deployment', 'weeks': 6, 'resources': ['Docker', 'AWS Services', 'Nginx Configuration']},
+            'step_5': {'task': 'Build Scalable Backend Services', 'weeks': 8, 'resources': ['Microservices Architecture', 'Load Balancing', 'Caching Strategies']}
+        },
+        
+        'devops engineer': {
+            'step_1': {'task': 'Learn Linux & Command Line', 'weeks': 5, 'resources': ['Linux Journey', 'Bash Scripting', 'System Administration']},
+            'step_2': {'task': 'Master CI/CD Pipelines', 'weeks': 6, 'resources': ['Jenkins', 'GitHub Actions', 'GitLab CI', 'Deployment Strategies']},
+            'step_3': {'task': 'Study Containerization & Orchestration', 'weeks': 7, 'resources': ['Docker Documentation', 'Kubernetes Basics', 'Container Security']},
+            'step_4': {'task': 'Learn Infrastructure as Code', 'weeks': 6, 'resources': ['Terraform', 'Ansible', 'CloudFormation', 'Pulumi']},
+            'step_5': {'task': 'Practice Cloud Solutions & Monitoring', 'weeks': 8, 'resources': ['AWS/Azure/GCP Services', 'Prometheus', 'Grafana', 'ELK Stack']}
+        }
+    }
+    
+    # Normalize the job role (convert to lowercase and handle common variations)
+    normalized_job_role = job_role.lower()
+    
+    # Map variations to standard roles
+    role_mapping = {
+        'data scientist': 'data scientist',
+        'data science': 'data scientist',
+        'ds': 'data scientist',
+        
+        'software engineer': 'software engineer',
+        'swe': 'software engineer',
+        'software developer': 'software engineer',
+        'programmer': 'software engineer',
+        
+        'ux designer': 'ux designer',
+        'ui designer': 'ux designer',
+        'ui/ux designer': 'ux designer',
+        'user experience designer': 'ux designer',
+        
+        'web developer': 'web developer',
+        'web dev': 'web developer',
+        'website developer': 'web developer',
+        
+        'frontend developer': 'frontend developer',
+        'front-end developer': 'frontend developer',
+        'front end developer': 'frontend developer',
+        'fe developer': 'frontend developer',
+        
+        'backend developer': 'backend developer',
+        'back-end developer': 'backend developer',
+        'back end developer': 'backend developer',
+        'be developer': 'backend developer',
+        
+        'digital marketer': 'digital marketer',
+        'digital marketing': 'digital marketer',
+        'online marketer': 'digital marketer',
+        
+        'data analyst': 'data analyst',
+        'business intelligence analyst': 'data analyst',
+        'bi analyst': 'data analyst',
+        
+        'product manager': 'product manager',
+        'pm': 'product manager',
+        'product owner': 'product manager',
+        
+        'cybersecurity analyst': 'cybersecurity analyst',
+        'security analyst': 'cybersecurity analyst',
+        'infosec analyst': 'cybersecurity analyst',
+        'cyber security analyst': 'cybersecurity analyst',
+        
+        'devops engineer': 'devops engineer',
+        'devops': 'devops engineer',
+        'site reliability engineer': 'devops engineer',
+        'sre': 'devops engineer',
+        
+        'machine learning engineer': 'machine learning engineer',
+        'ml engineer': 'machine learning engineer',
+        'ai engineer': 'machine learning engineer',
+        
+        'business analyst': 'business analyst',
+        'ba': 'business analyst',
+        
+        'project manager': 'project manager',
+        'project management': 'project manager',
+        
+        'marketing manager': 'marketing manager',
+        'marketing lead': 'marketing manager'
+    }
+    
+    # Get the standardized role name if available, otherwise use the original
+    standard_role = role_mapping.get(normalized_job_role, normalized_job_role)
+    
+    # Get the roadmap for the standardized role
+    roadmap = roadmaps.get(standard_role, None)
+    
+    if roadmap:
+        # Calculate total weeks
+        total_weeks = sum(step['weeks'] for step in roadmap.values())
+        return render_template('roadmap.html', job_role=job_role.title(), roadmap=roadmap, total_weeks=total_weeks)
+    else:
+        return "Roadmap not available for this role. Please check available career paths or contact an advisor."
+
 @app.route('/job_recommendation', methods=['GET', 'POST'])
 @login_required
 def job_recommendation():
