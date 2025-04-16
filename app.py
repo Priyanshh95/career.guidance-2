@@ -180,6 +180,168 @@ def train_model():
 # Train Model
 train_model()
 
+@app.route('/job/<job_name>')
+def job_detail(job_name):
+    job_info = get_job_info(job_name)  # You’ll define this function
+    return render_template("job_detail.html", job_name=job_name, job_info=job_info)
+
+def get_job_info(job_name):
+    jobs = {
+        "data_scientist": {
+            "title": "Data Scientist",
+            "description": "Uses statistics, machine learning, and data analysis to extract insights and guide data-driven decisions.",
+            "skills": ["Python", "R", "SQL", "Machine Learning", "Data Visualization", "Statistical Analysis"],
+            "responsibilities": [
+                "Collect, clean, and analyze large datasets",
+                "Build predictive models",
+                "Communicate insights via reports and visualizations"
+            ],
+            "education": "Bachelor’s or Master’s in CS, Stats, or related field. PhD preferred for research roles.",
+            "salary": "$95,000 - $150,000 per year",
+            "outlook": "Excellent, with 36% growth expected over the next decade."
+        },
+        "software_engineer": {
+            "title": "Software Engineer",
+            "description": "Designs, builds, tests, and maintains software systems.",
+            "skills": ["Java", "Python", "C++", "Git", "Data Structures", "OOP"],
+            "responsibilities": [
+                "Develop and test software applications",
+                "Collaborate with cross-functional teams",
+                "Maintain and improve codebases"
+            ],
+            "education": "Bachelor’s in CS or related field",
+            "salary": "$85,000 - $140,000 per year",
+            "outlook": "22% growth expected; high demand across industries."
+        },
+        "web_developer": {
+            "title": "Web Developer",
+            "description": "Builds and maintains websites and web applications.",
+            "skills": ["HTML", "CSS", "JavaScript", "React", "Node.js", "UI/UX"],
+            "responsibilities": [
+                "Design responsive websites",
+                "Ensure performance and scalability",
+                "Work with designers and backend teams"
+            ],
+            "education": "Degree or diploma in Web Development or CS",
+            "salary": "$65,000 - $110,000 per year",
+            "outlook": "13% growth as businesses expand their online presence."
+        },
+        "business_analyst": {
+            "title": "Business Analyst",
+            "description": "Analyzes business processes to identify areas for improvement.",
+            "skills": ["Excel", "SQL", "Requirement Gathering", "Communication", "Problem-solving"],
+            "responsibilities": [
+                "Identify business needs and solutions",
+                "Bridge between stakeholders and tech team",
+                "Document requirements and generate reports"
+            ],
+            "education": "Bachelor’s in Business, IT, or related field",
+            "salary": "$70,000 - $115,000 per year",
+            "outlook": "Growing demand as companies pursue optimization."
+        },
+        "system_engineer": {
+            "title": "System Engineer",
+            "description": "Maintains and administers an organization’s IT systems.",
+            "skills": ["Linux", "Networking", "Scripting", "Cloud Platforms"],
+            "responsibilities": [
+                "Install and configure software and hardware",
+                "Monitor system performance",
+                "Troubleshoot technical issues"
+            ],
+            "education": "Bachelor’s in IT or related field",
+            "salary": "$75,000 - $120,000 per year",
+            "outlook": "Steady demand for system operations roles."
+        },
+        "ai_ml_engineer": {
+            "title": "AI/ML Engineer",
+            "description": "Develops machine learning models and AI systems.",
+            "skills": ["Python", "TensorFlow", "Pandas", "NLP", "Deep Learning"],
+            "responsibilities": [
+                "Build and train ML models",
+                "Deploy models into production",
+                "Work with data teams to gather and process data"
+            ],
+            "education": "Bachelor’s/Master’s in AI, ML, CS, or similar",
+            "salary": "$100,000 - $160,000 per year",
+            "outlook": "High growth with applications across industries."
+        },
+        "cloud_engineer": {
+            "title": "Cloud Engineer",
+            "description": "Designs and maintains cloud infrastructure and services.",
+            "skills": ["AWS", "Azure", "Docker", "Kubernetes", "Terraform"],
+            "responsibilities": [
+                "Build and manage cloud resources",
+                "Implement CI/CD pipelines",
+                "Ensure high availability and security"
+            ],
+            "education": "Bachelor’s in IT or Cloud Certifications",
+            "salary": "$90,000 - $145,000 per year",
+            "outlook": "Strong outlook as cloud adoption increases."
+        },
+        "devops_engineer": {
+            "title": "DevOps Engineer",
+            "description": "Combines development and operations to streamline deployment processes.",
+            "skills": ["Jenkins", "Docker", "CI/CD", "Monitoring", "Linux"],
+            "responsibilities": [
+                "Automate software pipelines",
+                "Manage infrastructure as code",
+                "Collaborate with developers and IT"
+            ],
+            "education": "Bachelor’s in CS or related field",
+            "salary": "$95,000 - $140,000 per year",
+            "outlook": "Rapidly growing demand in agile environments."
+        },
+        "network_engineer": {
+            "title": "Network Engineer",
+            "description": "Designs and manages computer networks within an organization.",
+            "skills": ["Cisco", "Routing/Switching", "Firewalls", "Security"],
+            "responsibilities": [
+                "Set up and maintain networks",
+                "Troubleshoot connectivity issues",
+                "Ensure network security"
+            ],
+            "education": "Bachelor’s in Networking or IT",
+            "salary": "$75,000 - $120,000 per year",
+            "outlook": "Steady growth as infrastructure scales."
+        },
+        "database_administrator": {
+            "title": "Database Administrator",
+            "description": "Maintains and secures databases, ensuring efficient access and storage.",
+            "skills": ["SQL", "Oracle", "MySQL", "Backup/Recovery", "Performance Tuning"],
+            "responsibilities": [
+                "Install and upgrade DB systems",
+                "Monitor performance",
+                "Implement security policies"
+            ],
+            "education": "Bachelor’s in CS or Database Certifications",
+            "salary": "$80,000 - $130,000 per year",
+            "outlook": "Essential role for data-driven companies."
+        },
+        "cybersecurity_analyst": {
+            "title": "Cybersecurity Analyst",
+            "description": "Protects systems from cyber threats and vulnerabilities.",
+            "skills": ["Firewalls", "Threat Detection", "Risk Management", "SIEM"],
+            "responsibilities": [
+                "Monitor and secure networks",
+                "Analyze threat intelligence",
+                "Respond to security incidents"
+            ],
+            "education": "Bachelor’s in Cybersecurity or CS",
+            "salary": "$85,000 - $135,000 per year",
+            "outlook": "35% growth expected due to rising cyber threats."
+        },
+    }
+    return jobs.get(job_name.lower().replace(" ", "_"), {
+        "title": "Unknown Role",
+        "description": "No details found for this job role.",
+        "skills": [],
+        "responsibilities": [],
+        "education": "N/A",
+        "salary": "N/A",
+        "outlook": "N/A"
+    })
+
+
 @app.route('/job_recommendation', methods=['GET', 'POST'])
 @login_required
 def job_recommendation():

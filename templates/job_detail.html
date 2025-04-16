@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job_name.title() }} - Job Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-transform: capitalize;
+        }
+        ul {
+            padding-left: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-4">← Back to Dashboard</a>
+
+    <div class="card p-4">
+        <h2 class="mb-3">{{ job_info.title }}</h2>
+        <p><strong>Description:</strong> {{ job_info.description }}</p>
+        <p><strong>Required Skills:</strong></p>
+        <ul>
+            {% for skill in job_info.skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Responsibilities:</strong></p>
+        <ul>
+            {% for task in job_info.responsibilities %}
+            <li>{{ task }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Education:</strong> {{ job_info.education }}</p>
+        <p><strong>Average Salary:</strong> {{ job_info.salary }}</p>
+        <p><strong>Job Outlook:</strong> {{ job_info.outlook }}</p>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+<!-- Create a new file: role_details.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Role Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .role-details-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .role-title {
+            font-size: 32px;
+            color: #2c3e50;
+        }
+
+        .back-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .role-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .role-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .skills-list, .responsibilities-list {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .salary-range {
+            font-size: 18px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .education-requirements {
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .role-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="role-details-container">
+        <div class="role-header">
+            <h1 class="role-title" id="role-title">Career Role</h1>
+            <button class="back-button" onclick="history.back()">Back to Results</button>
+        </div>
+        
+        <div class="role-content">
+            <div class="role-section">
+                <h2 class="section-title">Description</h2>
+                <p id="role-description">Loading...</p>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="section-title">Key Skills</h2>
+                <ul class="skills-list" id="role-skills">
+                    <!-- Skills will be populated here -->
+                <!-- </ul>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="section-title">Responsibilities</h2>
+                <ul class="responsibilities-list" id="role-responsibilities">
+                    <!-- Responsibilities will be populated here 
+                </ul>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="section-title">Education & Requirements</h2>
+                <p class="education-requirements" id="role-education">Loading...</p>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="section-title">Average Salary</h2>
+                <p class="salary-range" id="role-salary">Loading...</p>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="section-title">Future Outlook</h2>
+                <p id="role-outlook">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Career roles database
+        const careerRolesData = {
+            "data_scientist": {
+                title: "Data Scientist",
+                description: "A Data Scientist uses statistical methods, machine learning, and data analysis to extract insights and knowledge from data. They work with large datasets to solve complex business problems and help organizations make data-driven decisions.",
+                skills: ["Python", "R", "SQL", "Machine Learning", "Statistical Analysis", "Data Visualization", "Big Data Technologies", "Problem-solving"],
+                responsibilities: [
+                    "Collect, process, and analyze large datasets",
+                    "Build predictive models and machine learning algorithms",
+                    "Create data visualizations to communicate findings",
+                    "Work with stakeholders to identify opportunities for data-driven solutions",
+                    "Develop and implement data collection and analysis methodologies"
+                ],
+                education: "Typically requires a Bachelor's or Master's degree in Computer Science, Statistics, Mathematics, or related field. Many positions prefer a PhD for research-oriented roles.",
+                salary: "$95,000 - $150,000 per year",
+                outlook: "Excellent growth prospects with a projected 36% increase in demand over the next decade as more industries adopt data-driven decision making."
+            },
+            "software_engineer": {
+                title: "Software Engineer",
+                description: "Software Engineers design, develop, and maintain software systems and applications. They write code, test applications, and collaborate with cross-functional teams to create software solutions that meet user needs.",
+                skills: ["JavaScript", "Python", "Java", "C++", "SQL", "Git", "Agile Methodologies", "Problem-solving"],
+                responsibilities: [
+                    "Design and implement software solutions",
+                    "Write clean, efficient, and maintainable code",
+                    "Test and debug applications",
+                    "Collaborate with product managers, designers, and other engineers",
+                    "Participate in code reviews and documentation"
+                ],
+                education: "Bachelor's degree in Computer Science, Software Engineering, or related field. Some positions may accept equivalent practical experience.",
+                salary: "$85,000 - $140,000 per year",
+                outlook: "Strong job growth with a projected 22% increase over the next decade as digital transformation continues across industries."
+            },
+            "ux_designer": {
+                title: "UX Designer",
+                description: "UX (User Experience) Designers create meaningful and relevant experiences for users. They research user needs, design user flows and interfaces, and work with development teams to implement user-centered designs.",
+                skills: ["User Research", "Wireframing", "Prototyping", "UI Design", "Usability Testing", "Information Architecture", "Figma/Sketch", "Empathy"],
+                responsibilities: [
+                    "Conduct user research and usability testing",
+                    "Create user personas and user journey maps",
+                    "Design wireframes, prototypes, and mockups",
+                    "Collaborate with UI designers and developers",
+                    "Advocate for user needs in product development"
+                ],
+                education: "Bachelor's degree in Design, Human-Computer Interaction, or related field. Portfolio demonstrating UX skills is crucial.",
+                salary: "$80,000 - $130,000 per year",
+                outlook: "Positive job outlook with a projected 8% growth over the next decade as companies increasingly focus on improving user experiences."
+            },
+            "data_analyst": {
+                title: "Data Analyst",
+                description: "Data Analysts collect, process, and analyze data to help organizations make better decisions. They transform complex data into actionable insights using various analytical tools and techniques.",
+                skills: ["SQL", "Excel", "Data Visualization", "Statistical Analysis", "Python/R", "Business Intelligence Tools", "Critical Thinking", "Communication"],
+                responsibilities: [
+                    "Collect and clean data from various sources",
+                    "Analyze data to identify patterns and trends",
+                    "Create dashboards and reports to visualize findings",
+                    "Collaborate with stakeholders to understand business needs",
+                    "Make data-driven recommendations to improve processes"
+                ],
+                education: "Bachelor's degree in Statistics, Mathematics, Computer Science, or related field. Some entry-level positions accept relevant certifications.",
+                salary: "$65,000 - $110,000 per year",
+                outlook: "Growing demand with a projected 23% increase over the next decade as businesses continue to rely on data for decision-making."
+            },
+            "product_manager": {
+                title: "Product Manager",
+                description: "Product Managers oversee the development and success of products. They identify customer needs, define product vision, and work with cross-functional teams to bring products to market.",
+                skills: ["Market Research", "Strategic Thinking", "Project Management", "Communication", "Data Analysis", "Product Roadmapping", "User Empathy", "Technical Understanding"],
+                responsibilities: [
+                    "Define product vision and strategy",
+                    "Create and prioritize product roadmaps",
+                    "Collaborate with engineering, design, and marketing teams",
+                    "Gather and analyze customer feedback",
+                    "Monitor product performance and make data-driven decisions"
+                ],
+                education: "Bachelor's degree in Business, Computer Science, or related field. MBA can be beneficial. Experience in relevant industry often valued over specific education.",
+                salary: "$90,000 - $150,000 per year",
+                outlook: "Strong growth projected at 10% over the next decade as companies focus on developing competitive products in saturated markets."
+            },
+            "cybersecurity_analyst": {
+                title: "Cybersecurity Analyst",
+                description: "Cybersecurity Analysts protect computer systems and networks from cyber threats. They monitor for security breaches, implement protective measures, and respond to security incidents.",
+                skills: ["Network Security", "Threat Analysis", "Vulnerability Assessment", "Security Tools", "Incident Response", "Risk Management", "Programming", "Operating Systems"],
+                responsibilities: [
+                    "Monitor networks for security breaches",
+                    "Analyze and assess vulnerabilities in IT systems",
+                    "Develop security strategies and protocols",
+                    "Respond to security incidents and threats",
+                    "Implement security systems and controls"
+                ],
+                education: "Bachelor's degree in Cybersecurity, Computer Science, or related field. Security certifications like CISSP, CEH, or Security+ are highly valued.",
+                salary: "$85,000 - $135,000 per year",
+                outlook: "Excellent growth prospects with a projected 35% increase over the next decade due to increasing cyber threats and digital adoption."
+            }
+        };
+
+        // Function to load role details from URL parameter
+        function loadRoleDetails() {
+            // Get role ID from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const roleId = urlParams.get('role');
+            
+            if (roleId && careerRolesData[roleId]) {
+                const roleData = careerRolesData[roleId];
+                
+                // Update page elements with role data
+                document.getElementById('role-title').textContent = roleData.title;
+                document.getElementById('role-description').textContent = roleData.description;
+                document.getElementById('role-education').textContent = roleData.education;
+                document.getElementById('role-salary').textContent = roleData.salary;
+                document.getElementById('role-outlook').textContent = roleData.outlook;
+                
+                // Update skills list
+                const skillsList = document.getElementById('role-skills');
+                skillsList.innerHTML = '';
+                roleData.skills.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.textContent = skill;
+                    skillsList.appendChild(li);
+                });
+                
+                // Update responsibilities list
+                const respList = document.getElementById('role-responsibilities');
+                respList.innerHTML = '';
+                roleData.responsibilities.forEach(resp => {
+                    const li = document.createElement('li');
+                    li.textContent = resp;
+                    respList.appendChild(li);
+                });
+            } else {
+                // Handle case where role ID is invalid
+                document.getElementById('role-title').textContent = "Role Not Found";
+                document.getElementById('role-description').textContent = "The requested career role information could not be found.";
+            }
+        }
+        
+        // Load role details when page loads
+        window.addEventListener('DOMContentLoaded', loadRoleDetails);
+    </script>
+</body>
+</html> --> -->
