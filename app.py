@@ -17,8 +17,87 @@ from scrape_careers import scrape_career_details
 
 import re
 
+from flask import Flask, render_template, request, session
+import subprocess
+import random
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Needed to use session
+
+questions = [
+    "Reverse a string.",
+    "Check if a number is a prime number.",
+    "Print the first n terms of the Fibonacci series.",
+    "Find the factorial of a number.",
+    "Check if a number is a palindrome.",
+    "Find the largest element in an array.",
+    "Calculate the sum of digits of a number.",
+    "Count the number of vowels in a string.",
+    "Check if a number is an Armstrong number.",
+    "Sort an array using Bubble Sort."
+]
+
+# Expected outputs for some questions (you can expand this based on your requirements)
+expected_outputs = {
+    "Reverse a string.": "gnirts",
+    "Check if a number is a prime number.": "Prime",  # For example: if input is 7, output would be 'Prime'
+    "Find the factorial of a number.": "120",  # For input 5
+    "Check if a number is a palindrome.": "Palindrome",  # For example: input 121
+    "Find the largest element in an array.": "9",  # For array [1, 9, 3]
+    "Calculate the sum of digits of a number.": "15",  # For input 567
+    "Count the number of vowels in a string.": "3",  # For input "hello"
+    "Check if a number is an Armstrong number.": "Armstrong",  # For input 153
+    "Sort an array using Bubble Sort.": "1 2 3 4 5"  # For input array [5, 4, 3, 2, 1]
+}
+
+@app.route('/coding_test', methods=['GET', 'POST'])
+def coding_test():
+    output = None
+    code = ""
+    custom_input = ""
+    marks = 0
+    
+    # Set the question only if it's not already in the session
+    if 'question' not in session:
+        session['question'] = random.choice(questions)
+    
+    question = session['question']
+
+    if request.method == 'POST':
+        code = request.form['code']
+        custom_input = request.form.get('custom_input', '')
+        try:
+            with open("user_code.cpp", "w") as f:
+                f.write(code)
+
+            compile_result = subprocess.run(["g++", "user_code.cpp", "-o", "user_code.out"], capture_output=True, text=True)
+
+            if compile_result.returncode != 0:
+                output = compile_result.stderr
+            else:
+                run_result = subprocess.run(
+                    ["./user_code.out"],
+                    input=custom_input.strip(),
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                output = run_result.stdout
+
+                # Evaluate the output and assign marks based on correctness
+                if output.strip() == expected_outputs.get(question, "").strip():
+                    marks = 100
+                else:
+                    marks = 50  # For incorrect answers, you can assign partial marks
+
+        except subprocess.TimeoutExpired:
+            output = "⏱️ Time Limit Exceeded"
+        except Exception as e:
+            output = str(e)
+
+    return render_template("coding_test.html", output=output, code=code, custom_input=custom_input, question=question, marks=marks)
+
+
 app.config['SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///career_guidance.db'
 db = SQLAlchemy(app)
