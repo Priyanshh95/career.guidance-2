@@ -1,0 +1,33 @@
+<!-- templates/coding_test.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C++ Coding Test</title>
+</head>
+<body>
+    <h2>C++ Coding Test</h2>
+
+    <h3>Question:</h3>
+    <p>{{ question }}</p>
+
+    <form method="POST" action="/coding_test">
+        <label for="code">Code:</label><br>
+        <textarea name="code" rows="15" cols="80">{{ code or '#include<iostream>\nusing namespace std;\nint main() {\n    // Write your code here\n    return 0;\n}' }}</textarea><br><br>
+
+        <label for="custom_input">Custom Input (optional):</label><br>
+        <textarea name="custom_input" rows="5" cols="80">{{ custom_input }}</textarea><br><br>
+
+        <input type="submit" value="Run">
+    </form>
+
+    {% if output %}
+        <h3>Output:</h3>
+        <pre>{{ output }}</pre>
+    {% endif %}
+
+    {% if marks is not none %}
+        <h3>Marks:</h3>
+        <p>Your score: {{ marks }} / 100</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!-- roadmap.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap for {{ job_role }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .roadmap-container {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .step {
+            margin-bottom: 20px;
+        }
+        .step h5 {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .step p {
+            font-size: 16px;
+            color: #555;
+        }
+        .back-btn {
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Roadmap for {{ job_role }}</h2>
+        <div class="roadmap-container">
+            <h4>Steps to Become a {{ job_role }}:</h4>
+            {% for step, details in roadmap.items() %}
+                <div class="step">
+                    <h5>{{ details['task'] }}</h5>
+                    <p>Estimated Time: {{ details['weeks'] }} weeks</p>
+                </div>
+            {% endfor %}
+            <form action="{{ url_for('job_detail', job_name=job_role) }}" method="GET">
+                <button type="submit" class="back-btn">Back to Job Details</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

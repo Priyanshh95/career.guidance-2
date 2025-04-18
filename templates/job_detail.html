@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job_name.title() }} - Job Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-transform: capitalize;
+        }
+        ul {
+            padding-left: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-4">← Back to Dashboard</a>
+
+    <div class="card p-4">
+        <h2 class="mb-3">{{ job_info.title }}</h2>
+        <p><strong>Description:</strong> {{ job_info.description }}</p>
+        <p><strong>Required Skills:</strong></p>
+        <ul>
+            {% for skill in job_info.skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Responsibilities:</strong></p>
+        <ul>
+            {% for task in job_info.responsibilities %}
+            <li>{{ task }}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Education:</strong> {{ job_info.education }}</p>
+        <p><strong>Average Salary:</strong> {{ job_info.salary }}</p>
+        <p><strong>Job Outlook:</strong> {{ job_info.outlook }}</p>
+    </div>
+    <form action="{{ url_for('show_roadmap', job_role=job_name) }}" method="GET">
+        <button type="submit" class="btn btn-secondary mt-2">Yes, show roadmap</button>
+    </form>
+</div>
+<!-- Add the roadmap prompt here -->
+
+
+</body>
+</html>
