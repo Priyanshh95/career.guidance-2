@@ -1,8 +1,5 @@
-__pycache__/
+_pycache_/
 *.pyc
 venv/
-<<<<<<< HEAD
 instance/*.db
-=======
 .env
->>>>>>> upstream/main

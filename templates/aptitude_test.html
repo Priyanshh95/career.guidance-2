@@ -24,11 +24,20 @@
         }
 
         window.onload = startTimer;
+
+        function goBack() {
+            window.history.back();
+        }
     </script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center">Aptitude Test</h2>
+    <div class="container mt-3">
+        <!-- Back Button -->
+        <button onclick="goBack()" class="btn btn-link text-decoration-none">
+            &#8592; Back
+        </button>
+
+        <h2 class="text-center mt-3">Aptitude Test</h2>
         <p id="timer" class="text-danger text-center fs-4"></p>
 
         <form id="quizForm" method="POST">

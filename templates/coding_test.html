@@ -3,8 +3,22 @@
 <html>
 <head>
     <title>C++ Coding Test</title>
+    <style>
+        .back-button {
+            background: none;
+            border: none;
+            color: black;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Back Button -->
+    <button onclick="window.history.back()" class="back-button">&#8592; Back</button>
+
     <h2>C++ Coding Test</h2>
 
     <h3>Question:</h3>
@@ -29,5 +43,6 @@
         <h3>Marks:</h3>
         <p>Your score: {{ marks }} / 100</p>
     {% endif %}
+
 </body>
 </html>
