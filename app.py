@@ -13,7 +13,7 @@ import json
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
 from scrape_careers import scrape_career_details
-from industry_trends import get_industry_trends
+
 import re
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_user
