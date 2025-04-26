@@ -1,77 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mb-4">Welcome, {{ current_user.username }}!</h2>
+<h2 class="mb-5">Welcome, {{ current_user.username }}!</h2>
 
-<div class="row">
-    <!-- Left Side: Scores -->
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Your Assessments</h5>
-                {% if current_user.assessments %}
-                <ul class="list-group">
-                    {% for assessment in current_user.assessments %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ assessment.assessment_type }}
-                        <span class="badge bg-primary rounded-pill">{{ assessment.score }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p class="card-text">No assessments taken yet.</p>
-                {% endif %}
-            </div>
-        </div>
+<div class="grid">
+    <!-- Left Side: Your Assessments -->
+    <div class="card">
+        <h5 class="card-title">Your Assessments</h5>
+        {% if current_user.assessments %}
+        <ul class="list-group list-group-flush mt-3">
+            {% for assessment in current_user.assessments %}
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none; padding: 8px 0;">
+                {{ assessment.assessment_type }}
+                <span class="badge bg-primary rounded-pill">{{ assessment.score }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="card-description mt-3">No assessments taken yet.</p>
+        {% endif %}
     </div>
 
-    <!-- Right Side: Available Tests -->
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Available Assessments</h5>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Aptitude Test</h6>
-                                <p class="card-text">Test your Aptitude skills.</p>
-                                <a href="{{ url_for('aptitude_test') }}" class="btn btn-primary">Take Aptitude Test</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Creativity Test</h6>
-                                <p class="card-text">Test your Creativity.</p>
-                                <a href="{{ url_for('creativity_test') }}" class="btn btn-success">Take Creativity Test</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Communication Test</h6>
-                                <p class="card-text">Evaluate your Communication skills.</p>
-                                <a href="{{ url_for('communication_test') }}" class="btn btn-warning">Take Communication Test</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 🆕 Coding Test Card -->
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title">Coding Test</h6>
-                                <p class="card-text">Run and test your Python skills.</p>
-                                <a href="{{ url_for('coding_test') }}" class="btn btn-dark">Take Coding Test</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Coding Test Card -->
-                </div>
-            </div>
-        </div>
+    <!-- Right Side: Available Test -->
+    <div class="card text-center">
+        <h5 class="card-title">Self Assessment</h5>
+        <p class="card-description mt-3">
+            Test your Aptitude, Creativity, Communication, and Coding skills test.
+        </p>
+        <a href="{{ url_for('self_assessment') }}" class="btn-primary mt-4">Take Self Assessment</a>
     </div>
 </div>
 {% endblock %}
