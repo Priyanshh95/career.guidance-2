@@ -146,7 +146,7 @@ def login():
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('index'))
         else:
             flash('Invalid email or password', 'error')
     
@@ -226,7 +226,7 @@ def aptitude_test():
         db.session.commit()
 
         flash(f"You scored {score // 10} out of 10!", "success")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('index'))
 
     # GET request: Select 10 random questions and store in session
     questions = load_questions()
@@ -234,7 +234,6 @@ def aptitude_test():
     session['selected_questions'] = selected_questions  # Store in session for later grading
 
     return render_template('aptitude_test.html', questions=selected_questions)
-
 
 
 # Load and Train ML Model (only once)
