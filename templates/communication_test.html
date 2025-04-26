@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="mb-4">Communication Test</h2>
-<form id="communicationForm" method="POST">
-    <div class="mb-3">
-        <label for="text" class="form-label">Write a structured response on any topic:</label>
-        <textarea class="form-control" id="text" name="text" rows="5" required></textarea>
+<div class="test-container">
+    <h2 class="mb-4">Communication Test</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="communicationForm" method="POST">
+                <div class="mb-3">
+                    <label for="text" class="form-label">Write a structured response on any topic:</label>
+                    <textarea class="form-control" id="text" name="text" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
-<h3 class="mt-4">Feedback:</h3>
-<p id="feedback"></p>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Feedback:</h5>
+            <p id="feedback" class="card-text mt-3"></p>
+        </div>
+    </div>
+</div>
 
 <script>
     document.getElementById("communicationForm").onsubmit = async function(event) {
@@ -28,6 +39,5 @@
         let data = await response.json();
         document.getElementById("feedback").innerText = data.feedback;
     };
-    </script>
-    
+</script>
 {% endblock %}

@@ -14,7 +14,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_login import login_required, current_user
 from scrape_careers import scrape_career_details
 import re
-
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import login_user
+from werkzeug.security import generate_password_hash
 from flask import Flask, render_template, request, session
 import subprocess
 import random
@@ -140,7 +142,9 @@ def load_user(user_id):
 # Routes
 @app.route('/')
 def index():
-    return render_template('index.html')
+    year = datetime.now().year
+    return render_template('index.html', year=year)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -158,6 +162,14 @@ def login():
     
     return render_template('login.html')
 
+# Password strength checker function
+def is_strong_password(password):
+    # Minimum 8 characters, at least one uppercase, one lowercase, one digit, one special character
+    pattern = re.compile(
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+    )
+    return pattern.match(password) is not None
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -166,10 +178,12 @@ def signup():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
+        # Check password match
         if password != confirm_password:
             flash('Passwords do not match.', 'danger')
             return redirect(url_for('signup'))
 
+        # Check if username or email already exists
         if User.query.filter_by(username=username).first():
             flash('Username already exists.', 'danger')
             return redirect(url_for('signup'))
@@ -178,6 +192,13 @@ def signup():
             flash('Email already registered.', 'danger')
             return redirect(url_for('signup'))
 
+        # Server-side password strength validation
+        strong_password = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+        if not strong_password.match(password):
+            flash('Password must be at least 8 characters long and contain uppercase, lowercase, digit, and special character.', 'danger')
+            return redirect(url_for('signup'))
+
+        # Create user
         new_user = User(
             username=username,
             email=email,

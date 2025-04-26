@@ -14,38 +14,35 @@
 </div>
 
 {% if career_info %}
-    <h5>Career Details</h5>
-    <p>{{ career_info|replace('\n', '<br>')|safe }}</p>
+    <div class="card mb-4 p-4">
+        <h5 class="card-title">Career Details</h5>
+        <p class="card-text">{{ career_info|replace('\n', '<br>')|safe }}</p>
+    </div>
 {% endif %}
 
-<div class="row">
+<div class="grid">
     {% for career in careers %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ career.title }}</h5>
-                <p class="card-text">{{ career.description|replace('\n', '<br>')|safe }}</p>
-                <div class="mb-2">
-                    <strong>Requirements:</strong>
-                    <p class="mb-1">{{ career.requirements|replace('\n', '<br>')|safe }}</p>
-                </div>
-                <div class="mb-2">
-                    <strong>Salary Range:</strong>
-                    <p class="mb-1">{{ career.salary_range|replace('\n', '<br>')|safe }}</p>
-                </div>
-                <div class="mb-2">
-                    <strong>Growth Potential:</strong>
-                    <p class="mb-1">{{ career.growth_potential|replace('\n', '<br>')|safe }}</p>
-                </div>
+    <div class="card h-100">
+        <div class="card-body">
+            <h5 class="card-title">{{ career.title }}</h5>
+            <p class="card-text">{{ career.description|replace('\n', '<br>')|safe }}</p>
+            <div class="mb-2">
+                <strong>Requirements:</strong>
+                <p class="mb-1">{{ career.requirements|replace('\n', '<br>')|safe }}</p>
             </div>
-            <div class="card-footer">
-                <button class="btn btn-primary w-100">Learn More</button>
+            <div class="mb-2">
+                <strong>Salary Range:</strong>
+                <p class="mb-1">{{ career.salary_range|replace('\n', '<br>')|safe }}</p>
             </div>
+            <div class="mb-2">
+                <strong>Growth Potential:</strong>
+                <p class="mb-1">{{ career.growth_potential|replace('\n', '<br>')|safe }}</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary w-100">Learn More</button>
         </div>
     </div>
     {% endfor %}
 </div>
-
-
 {% endblock %}
-

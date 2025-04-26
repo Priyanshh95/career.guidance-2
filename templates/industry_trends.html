@@ -1,36 +1,50 @@
 {% extends "base.html" %} 
 {% block content %}
-<div class="container mt-5">
-  <h2>Explore Industry Trends</h2>
-  <form method="POST" class="form-inline mb-4">
-    <input type="text" name="job_role" class="form-control" placeholder="Enter job role (e.g. Data Scientist)" required>
-    <button class="btn btn-dark ml-2" type="submit">Fetch Trends</button>
+<div class="container mt-4">
+  <h2 class="mb-4">Explore Industry Trends</h2>
+  <form method="POST" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="job_role" class="form-control" placeholder="Enter job role (e.g. Data Scientist)" required>
+      <button class="btn btn-primary" type="submit">Fetch Trends</button>
+    </div>
   </form>
 
   {% if job_info %}
-  <div class="card p-3 mt-4">
-    <h4>{{ job_info.role }}</h4>
+  <div class="card p-4 mt-4">
+    <h4 class="mb-3">{{ job_info.role }}</h4>
     <p style="white-space: pre-line;">{{ job_info.description }}</p>
 
-    {% if job_info.trend_score is not none %}
-      <p><strong>📈 Google Trend Score (7 days):</strong> {{ job_info.trend_score }}/100</p>
-    {% else %}
-      <p><strong>📉 Google Trend Score:</strong> Not available</p>
-    {% endif %}
-
-    {% if job_info.salary %}
-      <p><strong>💰 Salary Range :</strong> {{ job_info.salary }}</p>
-    {% endif %}
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <div class="trend-stat p-3 bg-light rounded">
+          {% if job_info.trend_score is not none %}
+            <p class="mb-0"><strong>📈 Google Trend Score (7 days):</strong> {{ job_info.trend_score }}/100</p>
+          {% else %}
+            <p class="mb-0"><strong>📉 Google Trend Score:</strong> Not available</p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="trend-stat p-3 bg-light rounded">
+          {% if job_info.salary %}
+            <p class="mb-0"><strong>💰 Salary Range:</strong> {{ job_info.salary }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   
     {% if job_info.companies %}
-      <p><strong>🏢 Top Companies Hiring:</strong></p>
-      <ul>
-        {% for company in job_info.companies %}
-          <li>{{ company }}</li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p><strong>🏢 Top Companies Hiring:</strong> Not available at the moment.</p>
+      <div class="mt-4">
+        <p><strong>🏢 Top Companies Hiring:</strong></p>
+        <ul class="list-group">
+          {% for company in job_info.companies %}
+            <li class="list-group-item">{{ company }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <p class="mt-4"><strong>🏢 Top Companies Hiring:</strong> Not available at the moment.</p>
     {% endif %}
   </div>
   {% endif %}
