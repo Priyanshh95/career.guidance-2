@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="text-align: center; margin-top: 30px;">
+    <h1>Self Assessment Tests</h1>
+    <p>Select a test to evaluate your skills!</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; justify-content: center; padding: 40px; max-width: 800px; margin: 0 auto;">
+
+    <div style="background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; height: 250px; transition: 0.3s;">
+        <h2 style="font-size: 1.5rem;">Aptitude Test</h2>
+        <p style="text-align: center;">Test your aptitude skills.</p>
+        <a href="{{ url_for('aptitude_test') }}" style="margin-top: 15px; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px;">Start Test</a>
+    </div>
+
+    <div style="background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; height: 250px; transition: 0.3s;">
+        <h2 style="font-size: 1.5rem;">Creativity Test</h2>
+        <p style="text-align: center;">Test your creativity skills.</p>
+        <a href="{{ url_for('creativity_test') }}" style="margin-top: 15px; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px;">Start Test</a>
+    </div>
+
+    <div style="background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; height: 250px; transition: 0.3s;">
+        <h2 style="font-size: 1.5rem;">Communication Test</h2>
+        <p style="text-align: center;">Evaluate your communication skills.</p>
+        <a href="{{ url_for('communication_test') }}" style="margin-top: 15px; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px;">Start Test</a>
+    </div>
+
+    <div style="background: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; height: 250px; transition: 0.3s;">
+        <h2 style="font-size: 1.5rem;">Coding Test</h2>
+        <p style="text-align: center;">Run and test your coding skills.</p>
+        <a href="{{ url_for('coding_test') }}" style="margin-top: 15px; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px;">Start Test</a>
+    </div>
+
+</div>
+
+{% endblock %}

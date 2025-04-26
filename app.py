@@ -578,6 +578,10 @@ def get_industry_trends_llm(job_role):
             "salary": "N/A"
         }
 
+@app.route('/self_assessment')
+def self_assessment():
+    return render_template('self_assessment.html')
+
 @app.route('/logout')
 @login_required
 def logout():
