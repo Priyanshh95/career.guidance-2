@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify,redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify,redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,20 +10,15 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import random
 import json
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_login import login_required, current_user
 from scrape_careers import scrape_career_details
 import re
-from flask import flash, redirect, render_template, request, url_for
-from flask_login import login_user
-from werkzeug.security import generate_password_hash
-from flask import Flask, render_template, request, session
 import subprocess
 import random
 import openai
 from dotenv import load_dotenv
 import os
 
+from flask_login import login_required, current_user
 
 load_dotenv()  # Load env vars
 
@@ -211,11 +206,6 @@ def signup():
         return redirect(url_for('login'))
 
     return render_template('signup.html')
-
-import random
-import json
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_login import login_required, current_user
 
 # Sample set of 100 questions (Store this in a JSON file for better management)
 QUESTIONS_FILE = "aptitude_questions.json"
@@ -420,6 +410,25 @@ def job_recommendation():
 
     return render_template('job_recommendation.html')
 
+# Load job data at startup
+with open('static/data/2024.json') as f:
+    data_2024 = json.load(f)
+
+with open('static/data/2025.json') as f:
+    data_2025 = json.load(f)
+
+@app.route('/job-profile')
+def job_profile():
+    return render_template('job_profile.html')
+
+@app.route('/get-jobs/<year>')
+def get_jobs(year):
+    if year == '2024':
+        return jsonify(data_2024)
+    elif year == '2025':
+        return jsonify(data_2025)
+    else:
+        return jsonify({"error": "Invalid year"}), 404
 
 @app.route('/dashboard')
 @login_required
