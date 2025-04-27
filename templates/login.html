@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-5">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-4">
                 <h2 class="card-title text-center mb-4">Login</h2>
+                
+                <!-- Flash messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div>
+                      {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' or category == 'danger' else category }} alert-dismissible fade show" role="alert">
+                          {{ message }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+                
                 <form method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -17,8 +32,9 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
-                <p class="text-center mt-3">
-                    Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a>
+                
+                <p class="text-center mt-4">
+                    Don't have an account? <a href="{{ url_for('signup') }}" class="text-decoration-none">Sign up</a>
                 </p>
             </div>
         </div>
