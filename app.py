@@ -374,19 +374,21 @@ def call_llm(prompt):
 @app.route('/job_recommendation', methods=['GET', 'POST'])
 @login_required
 def job_recommendation():
+    test_scores = {}  # Default empty dictionary for test_scores
+
     if request.method == 'POST':
-        # Get user inputs
+        # Get user inputs and convert to float first, then to int
         user_data = [
-            int(request.form.get('DSA')),
-            int(request.form.get('DBMS')),
-            int(request.form.get('OS')),
-            int(request.form.get('CN')),
-            int(request.form.get('Mathmetics')),
-            int(request.form.get('Aptitute')),
-            int(request.form.get('Comm')),
-            int(request.form.get('Problem_Solving')),
-            int(request.form.get('Creative')),
-            int(request.form.get('Hackathons'))
+            int(float(request.form.get('DSA', 0))),
+            int(float(request.form.get('DBMS', 0))),
+            int(float(request.form.get('OS', 0))),
+            int(float(request.form.get('CN', 0))),
+            int(float(request.form.get('Mathmetics', 0))),
+            int(float(request.form.get('Aptitute', 0))),
+            int(float(request.form.get('Comm', 0))),
+            int(float(request.form.get('Problem_Solving', 0))),
+            int(float(request.form.get('Creative', 0))),
+            int(float(request.form.get('Hackathons', 0)))
         ]
 
         # Load model and encoder
@@ -396,19 +398,31 @@ def job_recommendation():
             label_encoder = pickle.load(f)
 
         # Predict job profile
-        # Get top 3 job predictions
         if hasattr(model, 'predict_proba'):
             probabilities = model.predict_proba([user_data])[0]
             top_3_indices = probabilities.argsort()[-3:][::-1]
             top_3_jobs = label_encoder.inverse_transform(top_3_indices).tolist()
         else:
-        # Fallback if model doesn't support predict_proba
             predicted_profile = model.predict([user_data])
-            top_3_jobs = label_encoder.inverse_transform(top_3_indices).tolist()
+            top_3_jobs = label_encoder.inverse_transform(predicted_profile).tolist()
 
-        return render_template('job_recommendation.html', job_predictions=top_3_jobs)
+        return render_template('job_recommendation.html', job_predictions=top_3_jobs, test_scores=test_scores)
 
-    return render_template('job_recommendation.html')
+    # ✅ Correct indentation here (GET method)
+    aptitude = Assessment.query.filter_by(user_id=current_user.id, assessment_type='Aptitude Test').order_by(Assessment.date_taken.desc()).first()
+    communication = Assessment.query.filter_by(user_id=current_user.id, assessment_type='Communication Test').order_by(Assessment.date_taken.desc()).first()
+    problem_solving = Assessment.query.filter_by(user_id=current_user.id, assessment_type='Coding Test').order_by(Assessment.date_taken.desc()).first()
+    creative = Assessment.query.filter_by(user_id=current_user.id, assessment_type='Creativity Test').order_by(Assessment.date_taken.desc()).first()
+
+    test_scores = {
+        "Aptitute": aptitude.score if aptitude else 0,
+        "Comm": communication.score if communication else 0,
+        "Problem_Solving": problem_solving.score if problem_solving else 0,
+        "Creative": creative.score if creative else 0
+    }
+
+    return render_template('job_recommendation.html', test_scores=test_scores)
+
 
 # Load job data at startup
 with open('static/data/2024.json') as f:
