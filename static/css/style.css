@@ -290,6 +290,31 @@
     }
   }
 
+  .back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .info-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+  
+  .info-text {
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
 /* body {
     font-family: 'Inter', sans-serif;
     background-color: #f8f9fa;

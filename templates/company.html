@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Company Details</title>
+  <link rel="stylesheet" href="styles.css"> <!-- your CSS file -->
+</head>
+<script>
+    function goBack() {
+            window.history.back();
+        }
+</script>
+<body>
+    <button onclick="goBack()" class="back-button">&#8592; Back</button>
+  <div class="container" style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
+    <!-- Company Heading -->
+    <h2 class="text-center">About the Company</h2>
+    <p style="text-align: center; color: var(--secondary-color); max-width: 700px; margin: 0 auto;">
+      Get insights from someone currently working here and explore their professional journey.
+    </p>
+
+    <!-- Dynamic Company Name Section -->
+    <div id="company-name-section">
+      <h3 id="company-name"></h3>
+    </div>
+
+    <!-- Professional Contact Section -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Current Employee</h3>
+        <p class="card-text">
+          Name: <strong><span id="employee-name">[Insert Name Here]</span></strong>
+        </p>
+        <p class="card-text">
+          Role: <span id="employee-role">[Insert Job Role or Title]</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Additional Information Section -->
+    <div class="info-section">
+      <p class="info-text">
+        This section contains important insights into the company, including culture, growth opportunities, and more. 
+        Stay tuned for a detailed profile of this company and the amazing opportunities they offer.
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    // Extract the company name from the URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyName = urlParams.get('name');
+
+    // Display the company name dynamically
+    if (companyName) {
+      document.getElementById('company-name').textContent = companyName;
+    } else {
+      document.getElementById('company-name').textContent = 'Company Not Found';
+    }
+  </script>
+
+</body>
+</html>
