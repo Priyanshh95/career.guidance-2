@@ -17,7 +17,7 @@ import random
 import openai
 from dotenv import load_dotenv
 import os
-
+import csv, os
 from flask_login import login_required, current_user
 
 load_dotenv()  # Load env vars
@@ -390,6 +390,20 @@ def job_recommendation():
             int(float(request.form.get('Creative', 0))),
             int(float(request.form.get('Hackathons', 0)))
         ]
+        name = current_user.username
+        email = current_user.email
+        scores = user_data
+
+
+        file_path = 'user_scores.csv'
+        file_exists = os.path.exists(file_path)
+        with open(file_path, 'a', newline='') as f:
+            writer = csv.writer(f)
+            # Write headers if file does not exist
+            if not file_exists:
+                writer.writerow(['Name', 'Email'] + user_data)
+            # Write user data
+            writer.writerow([name, email] + scores)
 
         # Load model and encoder
         with open('job_model.pkl', 'rb') as f:
