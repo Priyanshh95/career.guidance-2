@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 import os
 import csv, os
 from flask_login import login_required, current_user
+import pandas as pd
 
 load_dotenv()  # Load env vars
 
@@ -276,9 +277,22 @@ def train_model():
 train_model()
 @app.route('/job/<job_name>')
 def job_detail(job_name):
-    job_info = get_job_info_llm(job_name)
-    roadmap = get_roadmap_llm(job_name)  # << USE get_roadmap_llm here, not show_roadmap
-    return render_template("job_detail.html", job_name=job_name, job_info=job_info, roadmap=roadmap)
+        user_email = current_user.email
+        roadmap = {}
+
+    # Load latest user marks from CSV
+        df = pd.read_csv('user_scores.csv')
+        user_rows = df[df['Email'] == user_email]
+        if not user_rows.empty:
+            latest_scores = user_rows.iloc[-1].to_dict()
+        else:
+            latest_scores = {
+                'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
+                'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
+            }
+        job_info = get_job_info_llm(job_name)
+        roadmap = get_roadmap_llm(job_name, latest_scores)  # << USE get_roadmap_llm here, not show_roadmap
+        return render_template("job_detail.html", job_name=job_name, job_info=job_info, roadmap=roadmap)
 
 
 def get_job_info_llm(job_name):
@@ -326,31 +340,51 @@ def get_job_info_llm(job_name):
 
 @app.route('/roadmap/<job_role>', methods=['GET'])
 def show_roadmap(job_role):
-    roadmap = get_roadmap_llm(job_role)
-    return render_template("roadmap.html", job_role=job_role, roadmap=roadmap)
+        user_email = current_user.email
+        roadmap = {}
+
+    # Load latest user marks from CSV
+        df = pd.read_csv('user_scores.csv')
+        user_rows = df[df['Email'] == user_email]
+        if not user_rows.empty:
+            latest_scores = user_rows.iloc[-1].to_dict()
+        else:
+            latest_scores = {
+                'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
+                'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
+            }
+
+    # Now generate customized roadmap
+        roadmap = get_roadmap_llm(job_role, latest_scores)
+
+        return render_template("roadmap.html", job_role=job_role, roadmap=roadmap)
 
 # Pure function that returns dict
-def get_roadmap_llm(job_role):
+def get_roadmap_llm(job_role, user_scores):
+    # Convert the scores dict into a readable summary
+    score_summary = "\n".join([f"{k}: {v}%" for k, v in user_scores.items()])
+
     prompt = f"""
     You are an expert career counselor.
 
-    Generate a detailed 5-step learning roadmap for becoming a successful '{job_role}'.
+    The student has the following skills and subject performance:
+    {score_summary}
+
+    Based on this, generate a detailed 5-step learning roadmap tailored to their strengths for becoming a successful '{job_role}'.
 
     Each step should include:
     - Task (what to do)
     - Weeks (how many weeks needed)
     - 3 Recommended Resources (courses, books, tools, or websites)
 
-    Format your response strictly in JSON as follows:
+    Format the output in JSON like this:
     {{
         "step_1": {{"task": "", "weeks": , "resources": ["", "", ""]}},
-        "step_2": {{"task": "", "weeks": , "resources": ["", "", ""]}},
-        "step_3": {{"task": "", "weeks": , "resources": ["", "", ""]}},
-        "step_4": {{"task": "", "weeks": , "resources": ["", "", ""]}},
+        ...
         "step_5": {{"task": "", "weeks": , "resources": ["", "", ""]}}
     }}
 
-    Only output the JSON. No extra explanations.
+    Only return the JSON.
     """
     response = call_llm(prompt)
     import json
