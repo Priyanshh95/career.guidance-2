@@ -125,25 +125,58 @@
         }
     </style>
 </head>
+<!-- Update the header section in roadmap.html -->
+<!-- Update the header section in roadmap.html -->
 <body>
     <!-- Back Button -->
     <button onclick="window.history.back()" class="back-button">&#8592; Back</button>
     
     <div class="container">
-        <h2 class="text-center">Roadmap for {{ job_role }}</h2>
+        <h2 class="text-center">{{ weeks }}-Week Roadmap for {{ job_role }}</h2>
+        <p class="text-center text-muted">Customized learning plan based on your skills and preferences</p>
+        
         <div class="roadmap-container">
             <h4 class="mb-4">Steps to Become a {{ job_role }}:</h4>
+            
+            <!-- Progress bar to visualize the roadmap timeline -->
+            <div class="progress mb-4" style="height: 25px;">
+                {% set total_weeks = weeks|int %}
+                {% for step, details in roadmap.items() %}
+                    {% set step_weeks = details['weeks']|int %}
+                    {% set step_percentage = (step_weeks / total_weeks * 100)|round %}
+                    <div class="progress-bar bg-{{ ['primary', 'success', 'info', 'warning', 'danger'][loop.index0 % 5] }}" 
+                         role="progressbar" 
+                         style="width: {{ step_percentage }}%" 
+                         aria-valuenow="{{ step_percentage }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                        {{ step_weeks }} wk
+                    </div>
+                {% endfor %}
+            </div>
             
             {% for step, details in roadmap.items() %}
                 <div class="step">
                     <h5>{{ details['task'] }}</h5>
-                    <p>Estimated Time: {{ details['weeks'] }} weeks</p>
+                    <p><strong>Duration:</strong> {{ details['weeks'] }} weeks</p>
+                    
+                    {% if details['resources'] %}
+                    <p><strong>Recommended Resources:</strong></p>
+                    <ul>
+                        {% for resource in details['resources'] %}
+                            <li>{{ resource }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
                 </div>
             {% endfor %}
             
-            <form action="{{ url_for('job_detail', job_name=job_role) }}" method="GET">
-                <button type="submit" class="back-btn">Back to Job Details</button>
-            </form>
+            <div class="text-center mt-4">
+                <p>Total Duration: {{ weeks }} weeks</p>
+                <form action="{{ url_for('job_detail', job_name=job_role) }}" method="GET">
+                    <button type="submit" class="back-btn">Back to Job Details</button>
+                </form>
+            </div>
         </div>
     </div>
 </body>

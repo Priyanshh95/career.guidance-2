@@ -3,3 +3,4 @@ _pycache_/
 venv/
 instance/*.db
 .env
+user_scores.csv
