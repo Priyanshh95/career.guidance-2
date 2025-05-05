@@ -45,7 +45,7 @@
                         data.forEach(job => {
                             const row = document.createElement('tr');
                             row.innerHTML = `
-                                <td>${job.Company || '-'}</td>
+                                <td><a href="/company?name=${encodeURIComponent(job.Company)}">${job.Company}</a></td>
                                 <td>${job['Job Roles'] || job['Job Role'] || '-'}</td>
                                 <td>${job['CGPA Criteria'] || job['CGPA'] || '-'}</td>
                                 <td>${job['Salary Package\n(in LPA)'] || job['CTC (in LPA)'] || '-'}</td>

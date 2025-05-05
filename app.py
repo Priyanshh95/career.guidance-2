@@ -20,6 +20,8 @@ import os
 import csv, os
 from flask_login import login_required, current_user
 import pandas as pd
+from flask import Flask, render_template, request
+import os
 
 load_dotenv()  # Load env vars
 
@@ -482,6 +484,11 @@ with open('static/data/2025.json') as f:
 @app.route('/job-profile')
 def job_profile():
     return render_template('job_profile.html')
+
+@app.route('/company')
+def company():
+    company_name = request.args.get('name')
+    return render_template('company.html', name=company_name)
 
 @app.route('/get-jobs/<year>')
 def get_jobs(year):
