@@ -342,27 +342,36 @@ def get_job_info_llm(job_name):
 
 @app.route('/roadmap/<job_role>', methods=['GET'])
 def show_roadmap(job_role):
-        user_email = current_user.email
-        roadmap = {}
+    user_email = current_user.email
+    roadmap = {}
+    
+    # Get the number of weeks from the query parameter (default to 10 if not provided)
+    weeks = request.args.get('weeks', 10, type=int)
+    
+    # Ensure weeks is within valid range
+    if weeks < 1:
+        weeks = 1
+    elif weeks > 52:
+        weeks = 52
 
     # Load latest user marks from CSV
-        df = pd.read_csv('user_scores.csv')
-        user_rows = df[df['Email'] == user_email]
-        if not user_rows.empty:
-            latest_scores = user_rows.iloc[-1].to_dict()
-        else:
-            latest_scores = {
-                'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
-                'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
-            }
+    df = pd.read_csv('user_scores.csv')
+    user_rows = df[df['Email'] == user_email]
+    if not user_rows.empty:
+        latest_scores = user_rows.iloc[-1].to_dict()
+    else:
+        latest_scores = {
+            'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
+            'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
+        }
 
-    # Now generate customized roadmap
-        roadmap = get_roadmap_llm(job_role, latest_scores)
+    # Now generate customized roadmap with specified weeks
+    roadmap = get_roadmap_llm(job_role, latest_scores, weeks)
 
-        return render_template("roadmap.html", job_role=job_role, roadmap=roadmap)
+    return render_template("roadmap.html", job_role=job_role, roadmap=roadmap, weeks=weeks)
 
-# Pure function that returns dict
-def get_roadmap_llm(job_role, user_scores):
+# Update the get_roadmap_llm function to include weeks parameter
+def get_roadmap_llm(job_role, user_scores, weeks=10):
     # Convert the scores dict into a readable summary
     score_summary = "\n".join([f"{k}: {v}%" for k, v in user_scores.items()])
 
@@ -372,11 +381,12 @@ def get_roadmap_llm(job_role, user_scores):
     The student has the following skills and subject performance:
     {score_summary}
 
-    Based on this, generate a detailed 5-step learning roadmap tailored to their strengths for becoming a successful '{job_role}'.
+    Based on this, generate a detailed 5-step learning roadmap tailored to their strengths for becoming a successful '{job_role}'. 
+    The student wants to complete this roadmap in {weeks} weeks total.
 
     Each step should include:
     - Task (what to do)
-    - Weeks (how many weeks needed)
+    - Weeks (how many weeks needed, ensuring the total equals {weeks})
     - 3 Recommended Resources (courses, books, tools, or websites)
 
     Format the output in JSON like this:
@@ -386,13 +396,13 @@ def get_roadmap_llm(job_role, user_scores):
         "step_5": {{"task": "", "weeks": , "resources": ["", "", ""]}}
     }}
 
+    Ensure that the sum of all 'weeks' values equals exactly {weeks}.
     Only return the JSON.
     """
     response = call_llm(prompt)
     import json
     roadmap = json.loads(response)
     return roadmap
-
 
 openai.api_key = os.getenv("OPENAI_API_KEY") 
 def call_llm(prompt):
