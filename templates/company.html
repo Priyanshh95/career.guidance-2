@@ -1,64 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Company Details</title>
-  <link rel="stylesheet" href="styles.css"> <!-- your CSS file -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .back-button {
+      margin: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #6c757d;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-button:hover {
+      background-color: #5a6268;
+    }
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .linkedin-btn {
+      margin-top: 1rem;
+    }
+  </style>
 </head>
-<script>
-    function goBack() {
-            window.history.back();
-        }
-</script>
 <body>
-    <button onclick="goBack()" class="back-button">&#8592; Back</button>
-  <div class="container" style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
-    <!-- Company Heading -->
-    <h2 class="text-center">About the Company</h2>
-    <p style="text-align: center; color: var(--secondary-color); max-width: 700px; margin: 0 auto;">
+
+  <button onclick="history.back()" class="back-button">&#8592; Back</button>
+
+  <div class="container mt-4">
+    <h2 class="text-center mb-3">About the Company</h2>
+    <p class="text-center text-muted">
       Get insights from someone currently working here and explore their professional journey.
     </p>
 
-    <!-- Dynamic Company Name Section -->
-    <div id="company-name-section">
-      <h3 id="company-name"></h3>
+    <div class="text-center my-4">
+      <h3 id="company-name" class="fw-bold"></h3>
     </div>
 
-    <!-- Professional Contact Section -->
-    <div class="card">
+    <div class="card mb-4">
       <div class="card-body">
-        <h3 class="card-title">Current Employee</h3>
+        <h4 class="card-title">Current Employee</h4>
         <p class="card-text">
-          Name: <strong><span id="employee-name">[Insert Name Here]</span></strong>
+          Name: <strong><span id="employee-name">Priyanshu Bansal</span></strong>
         </p>
         <p class="card-text">
-          Role: <span id="employee-role">[Insert Job Role or Title]</span>
+          Role: <span id="employee-role">Software Engineer Intern</span>
         </p>
+        <a href="https://www.linkedin.com/in/priyanshu-bansal-885034262/" target="_blank" class="btn btn-primary linkedin-btn">
+          Connect on LinkedIn
+        </a>
       </div>
     </div>
 
-    <!-- Additional Information Section -->
-    <div class="info-section">
-      <p class="info-text">
-        This section contains important insights into the company, including culture, growth opportunities, and more. 
+    <div class="bg-light p-3 rounded">
+      <p>
+        This section contains important insights into the company, including culture, growth opportunities, and more.
         Stay tuned for a detailed profile of this company and the amazing opportunities they offer.
       </p>
     </div>
-
   </div>
 
   <script>
-    // Extract the company name from the URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const companyName = urlParams.get('name');
-
-    // Display the company name dynamically
-    if (companyName) {
-      document.getElementById('company-name').textContent = companyName;
-    } else {
-      document.getElementById('company-name').textContent = 'Company Not Found';
-    }
+    document.getElementById('company-name').textContent = companyName || 'Company Not Found';
   </script>
 
 </body>
