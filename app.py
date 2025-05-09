@@ -22,6 +22,7 @@ from flask_login import login_required, current_user
 import pandas as pd
 from flask import Flask, render_template, request
 import os
+import urllib.parse
 
 load_dotenv()  # Load env vars
 
@@ -279,29 +280,33 @@ def train_model():
 train_model()
 @app.route('/job/<job_name>')
 def job_detail(job_name):
-        user_email = current_user.email
-        roadmap = {}
+    # URL decode the job name
+    job_name = urllib.parse.unquote(job_name)
+    user_email = current_user.email
+    roadmap = {}
 
     # Load latest user marks from CSV
-        df = pd.read_csv('user_scores.csv')
-        user_rows = df[df['Email'] == user_email]
-        if not user_rows.empty:
-            latest_scores = user_rows.iloc[-1].to_dict()
-        else:
-            latest_scores = {
-                'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
-                'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
-            }
-        job_info = get_job_info_llm(job_name)
-        roadmap = get_roadmap_llm(job_name, latest_scores)  # << USE get_roadmap_llm here, not show_roadmap
-        return render_template("job_detail.html", job_name=job_name, job_info=job_info, roadmap=roadmap)
-
+    df = pd.read_csv('user_scores.csv')
+    user_rows = df[df['Email'] == user_email]
+    if not user_rows.empty:
+        latest_scores = user_rows.iloc[-1].to_dict()
+    else:
+        latest_scores = {
+            'DSA': 0, 'DBMS': 0, 'OS': 0, 'CN': 0, 'Mathmetics': 0,
+            'Aptitute': 0, 'Comm': 0, 'Problem_Solving': 0, 'Creative': 0, 'Hackathons': 0
+        }
+    
+    # Clean the job name for the API call
+    cleaned_job_name = job_name.replace('/', ' and ').strip()
+    job_info = get_job_info_llm(cleaned_job_name)
+    roadmap = get_roadmap_llm(cleaned_job_name, latest_scores)
+    return render_template("job_detail.html", job_name=job_name, job_info=job_info, roadmap=roadmap)
 
 def get_job_info_llm(job_name):
     prompt = f"""
     Give detailed information about the job role '{job_name}' in the following JSON format:
     {{
-        "title": "",
+        "title": "{job_name}",
         "description": "",
         "skills": [],
         "responsibilities": [],
@@ -309,17 +314,17 @@ def get_job_info_llm(job_name):
         "salary": "",
         "outlook": ""
     }}
-    Make it detailed and professional.
+    Make it detailed and professional. Focus on providing comprehensive information about this role.
     """
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",   # or "gpt-4" if you have access
+            model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a career guidance expert."},
+                {"role": "system", "content": "You are a career guidance expert specializing in providing detailed information about various job roles."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.5,  # lower means more accurate and consistent
+            temperature=0.5,
             max_tokens=1000
         )
         content = response['choices'][0]['message']['content']
@@ -328,7 +333,7 @@ def get_job_info_llm(job_name):
         job_info = json.loads(content)
         return job_info
     except Exception as e:
-        print(e)
+        print(f"Error fetching job info for {job_name}: {str(e)}")
         return {
             "title": job_name,
             "description": "No detailed information could be retrieved at the moment.",
